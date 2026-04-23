@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--color-background-tertiary,#f5f5f3);color:var(--color-text-primary,#1a1a18);font-size:14px}
+:root{--border:#e0ddd5;--bg:#fff;--bg2:#f5f5f3;--muted:#888;--purple:#534AB7;--purple-bg:#EEEDFE;--purple-light:#AFA9EC;--green:#1D9E75;--green-bg:#E1F5EE;--yellow-c:#BA7517;--yellow-bg:#FAEEDA;--red-c:#A32D2D;--red-bg:#FCEBEB;--blue-c:#185FA5;--blue-bg:#E3EEF7}
+.app{max-width:720px;margin:0 auto;padding:16px}
+.header{margin-bottom:16px}
+.title{font-size:17px;font-weight:500;margin-bottom:4px}
+.subtitle{font-size:12px;color:var(--muted)}
+.stats-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.pill{font-size:11px;font-weight:500;padding:3px 10px;border-radius:20px;background:var(--bg2);color:var(--muted)}
+.pill-green{background:var(--green-bg);color:#085041}
+.pill-yellow{background:var(--yellow-bg);color:#633806}
+.pill-red{background:var(--red-bg);color:var(--red-c)}
+.pill-purple{background:var(--purple-bg);color:var(--purple)}
+.pill-blue{background:var(--blue-bg);color:var(--blue-c)}
+.topic-nav{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.nav-btn{width:32px;height:32px;border-radius:8px;border:0.5px solid var(--border);background:transparent;cursor:pointer;font-size:16px;color:var(--color-text-primary,#1a1a18);display:flex;align-items:center;justify-content:center}
+.nav-btn:disabled{opacity:0.3;cursor:not-allowed}
+.topic-title{flex:1;text-align:center;font-size:14px;font-weight:500}
+.topic-title small{font-size:11px;color:var(--muted);display:block;margin-top:2px;font-weight:400}
+.dots{display:flex;gap:4px;flex-wrap:wrap;justify-content:center;margin-bottom:16px}
+.dot{width:26px;height:26px;border-radius:50%;border:1.5px solid transparent;font-size:10px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;background:var(--bg2);color:var(--muted)}
+.dot-f{background:var(--purple);color:#fff;border-color:var(--purple)}
+.dot-f1{background:#9FE1CB;color:#085041;border-color:var(--green)}
+.dot-f2{background:#97C459;color:#173404;border-color:#3B6D11}
+.dot-f3{background:#EF9F27;color:#412402;border-color:#854F0B}
+.dot-f4{background:#F0997B;color:#4A1B0C;border-color:#993C1D}
+.dot-f5{background:#E8C467;color:#4A3610;border-color:#8B6B14}
+.cards{display:flex;flex-direction:column;gap:12px}
+.card{background:var(--bg);border:0.5px solid var(--border);border-left:3px solid var(--border);border-radius:10px;overflow:hidden}
+.card-green{border-left-color:var(--green)}
+.card-yellow{border-left-color:#EF9F27}
+.card-red{border-left-color:#E24B4A}
+.card-purple{border-left-color:var(--purple)}
+.card-blue{border-left-color:var(--blue-c)}
+.card-head{padding:12px 14px 0;display:flex;align-items:flex-start;gap:8px}
+.prob-n{font-size:11px;font-weight:600;color:var(--muted);min-width:42px;padding-top:1px}
+.problem-name{font-size:13px;font-weight:500;flex:1;line-height:1.3}
+.diff-badge{font-size:10px;font-weight:500;padding:2px 7px;border-radius:4px}
+.diff-E{background:#EAF3DE;color:#27500A}
+.diff-M{background:#FAEEDA;color:#633806}
+.diff-H{background:#FCEBEB;color:#791F1F}
+.card-links{padding:6px 14px 8px;display:flex;gap:6px;flex-wrap:wrap}
+.link-btn{font-size:11px;padding:3px 10px;border-radius:4px;border:0.5px solid var(--border);color:var(--muted);text-decoration:none;background:var(--bg2)}
+.link-btn:hover{color:var(--color-text-primary,#1a1a18);background:var(--bg)}
+.prem-badge{font-size:10px;padding:1px 5px;border-radius:3px;background:#FAEEDA;color:#633806;margin-left:4px}
+.section{padding:0 14px 12px}
+.section-label{font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;margin-top:10px}
+.divider{height:0.5px;background:var(--border);margin:0 14px}
+.row{display:flex;gap:6px;align-items:center;margin-bottom:6px;flex-wrap:wrap}
+select.ctrl{font-size:12px;padding:4px 8px;border-radius:6px;border:0.5px solid var(--border);background:var(--bg2);color:var(--color-text-primary,#1a1a18);cursor:pointer;flex:1}
+.color-btn{flex:1;font-size:12px;padding:4px 0;border-radius:6px;border:1px solid var(--border);background:transparent;cursor:pointer;transition:all .1s}
+.color-btn.active-green{background:var(--green-bg);border-color:var(--green)}
+.color-btn.active-yellow{background:var(--yellow-bg);border-color:#EF9F27}
+.color-btn.active-red{background:var(--red-bg);border-color:#E24B4A}
+.conf-btn{width:22px;height:22px;border-radius:50%;border:0.5px solid var(--border);background:var(--bg2);color:var(--muted);font-size:10px;cursor:pointer;font-weight:500;display:flex;align-items:center;justify-content:center;padding:0}
+.conf-btn.active{background:var(--purple);color:#fff;border-color:var(--purple)}
+.cb-row{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--muted);cursor:pointer}
+.cb-row input{accent-color:var(--purple);cursor:pointer}
+.time-input{width:52px;font-size:12px;padding:3px 6px;border-radius:6px;border:0.5px solid var(--border);background:var(--bg2);color:var(--color-text-primary,#1a1a18)}
+.notes-toggle{font-size:11px;color:var(--muted);background:none;border:none;cursor:pointer;padding:0;display:flex;align-items:center;gap:4px;margin-bottom:4px;margin-top:4px}
+.notes-toggle:hover{color:var(--color-text-primary,#1a1a18)}
+textarea.notes{width:100%;font-size:12px;padding:8px;border-radius:6px;border:0.5px solid var(--border);background:var(--bg2);color:var(--color-text-primary,#1a1a18);resize:vertical;min-height:90px;font-family:inherit;line-height:1.5;margin-top:4px}
+.concept-row{display:flex;align-items:flex-start;gap:8px;padding:6px 0;font-size:12px;border-bottom:0.5px dashed var(--border)}
+.concept-row:last-child{border-bottom:0}
+.concept-row input[type="checkbox"]{accent-color:var(--purple);cursor:pointer;margin-top:2px;flex-shrink:0}
+.concept-row .c-name{font-weight:500;color:var(--color-text-primary,#1a1a18);line-height:1.4}
+.concept-row .c-desc{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.4}
+.concept-row.done .c-name{color:var(--muted);text-decoration:line-through}
+.concept-body{flex:1}
+.phase-badge{display:inline-block;font-size:10px;font-weight:500;padding:2px 8px;border-radius:10px;margin-left:6px}
+.topic-header-card{background:var(--bg);border:0.5px solid var(--border);border-radius:10px;padding:14px;margin-bottom:12px}
+.topic-intro{font-size:12px;color:var(--muted);line-height:1.5;margin-top:6px}
+.progress-bar{height:4px;background:var(--bg2);border-radius:2px;overflow:hidden;margin-top:10px}
+.progress-fill{height:100%;background:var(--purple);border-radius:2px;transition:width .3s}
+.design-item{display:flex;align-items:flex-start;gap:8px;padding:8px 0;font-size:12px;border-bottom:0.5px dashed var(--border)}
+.design-item:last-child{border-bottom:0}
+.design-item input[type="checkbox"]{accent-color:var(--purple);cursor:pointer;margin-top:2px;flex-shrink:0}
+.design-item .d-name{font-weight:500;color:var(--color-text-primary,#1a1a18)}
+.design-item.done .d-name{color:var(--muted);text-decoration:line-through}
+.design-status{font-size:11px;padding:2px 6px;border-radius:4px;border:0.5px solid var(--border);background:var(--bg2);color:var(--muted);margin-left:auto}
+</style>
+</head>
+<body>
+<div class="app" id="root"></div>
+
+<script>
+// =============================================================
+// TOPIC DATA - follows the NeetCode roadmap dependency graph
+// =============================================================
+const TOPICS=[
+  {
+    id:1,name:'Arrays & Hashing',phase:'Foundations',
+    intro:'The foundation. Almost every interview question touches these tools — arrays, dicts, sets, sorting, prefix sums.',
+    concepts:[
+      {name:'Big-O fundamentals',desc:'Time & space for array ops, dict ops, sort'},
+      {name:'Hash map (dict) operations',desc:'Average O(1) lookup/insert, collisions'},
+      {name:'Hash set for uniqueness',desc:'Membership tests, deduplication'},
+      {name:'Frequency counting pattern',desc:'Counter / defaultdict(int)'},
+      {name:'Prefix sum',desc:'Precompute cumulative sums for O(1) range queries'},
+      {name:'Sorting as preprocessing',desc:'O(n log n) to expose structure'},
+      {name:'Two-pass vs one-pass',desc:'Trade memory vs clarity'},
+    ],
+    problems:[
+      {n:217,name:'Contains Duplicate',diff:'E',lc:'https://leetcode.com/problems/contains-duplicate/',nc:'https://neetcode.io/problems/duplicate-integer'},
+      {n:242,name:'Valid Anagram',diff:'E',lc:'https://leetcode.com/problems/valid-anagram/',nc:'https://neetcode.io/problems/is-anagram'},
+      {n:1,name:'Two Sum',diff:'E',lc:'https://leetcode.com/problems/two-sum/',nc:'https://neetcode.io/problems/two-integer-sum'},
+      {n:49,name:'Group Anagrams',diff:'M',lc:'https://leetcode.com/problems/group-anagrams/',nc:'https://neetcode.io/problems/anagram-groups'},
+      {n:347,name:'Top K Frequent Elements',diff:'M',lc:'https://leetcode.com/problems/top-k-frequent-elements/',nc:'https://neetcode.io/problems/top-k-elements-in-list'},
+      {n:271,name:'Encode and Decode Strings',diff:'M',prem:1,lc:'https://leetcode.com/problems/encode-and-decode-strings/',nc:'https://neetcode.io/problems/string-encode-and-decode'},
+      {n:238,name:'Product of Array Except Self',diff:'M',lc:'https://leetcode.com/problems/product-of-array-except-self/',nc:'https://neetcode.io/problems/products-of-array-discluding-self'},
+      {n:36,name:'Valid Sudoku',diff:'M',lc:'https://leetcode.com/problems/valid-sudoku/',nc:'https://neetcode.io/problems/valid-sudoku'},
+      {n:128,name:'Longest Consecutive Sequence',diff:'M',lc:'https://leetcode.com/problems/longest-consecutive-sequence/',nc:'https://neetcode.io/problems/longest-consecutive-sequence'},
+    ],
+    design:[
+      {name:'Latency vs throughput',desc:'The two primary performance dimensions'},
+      {name:'Vertical vs horizontal scaling',desc:'Bigger box vs more boxes'},
+      {name:'Stateless vs stateful services',desc:'Why statelessness scales'},
+      {name:'Caching basics & cache hit rate',desc:'Why caches exist; measuring effectiveness'},
+    ],
+  },
+  {
+    id:2,name:'Two Pointers',phase:'Foundations',
+    intro:'One of the highest-leverage patterns. Turns brute-force O(n²) scans into clean linear passes when data is sorted or has symmetry.',
+    concepts:[
+      {name:'Opposite-direction pointers',desc:'Converge from both ends (sorted arrays, palindromes)'},
+      {name:'Same-direction pointers',desc:'Slow/fast scan, in-place filtering'},
+      {name:'Slow/fast pointer pattern',desc:'Detect cycles, find midpoint'},
+      {name:'Sorted-array invariant',desc:'Why sorting unlocks two-pointer'},
+      {name:'In-place modification',desc:'O(1) extra space moves'},
+    ],
+    problems:[
+      {n:125,name:'Valid Palindrome',diff:'E',lc:'https://leetcode.com/problems/valid-palindrome/',nc:'https://neetcode.io/problems/is-palindrome'},
+      {n:167,name:'Two Sum II — Input Array Is Sorted',diff:'M',lc:'https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/',nc:'https://neetcode.io/problems/two-integer-sum-ii'},
+      {n:15,name:'3Sum',diff:'M',lc:'https://leetcode.com/problems/3sum/',nc:'https://neetcode.io/problems/three-integer-sum'},
+      {n:11,name:'Container With Most Water',diff:'M',lc:'https://leetcode.com/problems/container-with-most-water/',nc:'https://neetcode.io/problems/max-water-container'},
+      {n:42,name:'Trapping Rain Water',diff:'H',lc:'https://leetcode.com/problems/trapping-rain-water/',nc:'https://neetcode.io/problems/trapping-rain-water'},
+    ],
+    design:[
+      {name:'Load balancer basics',desc:'L4 vs L7, round-robin, least-connections'},
+      {name:'Reverse proxy vs load balancer',desc:'Overlap and distinctions'},
+      {name:'Health checks & failover',desc:'Detecting bad instances'},
+      {name:'CDN basics',desc:'Edge caching and geographic locality'},
+    ],
+  },
+  {
+    id:3,name:'Stack',phase:'Foundations',
+    intro:'LIFO as a mental model. The monotonic-stack trick appears in surprising places.',
+    concepts:[
+      {name:'LIFO semantics',desc:'push/pop/peek and when LIFO helps'},
+      {name:'Monotonic stack',desc:'Next greater/smaller element in O(n)'},
+      {name:'Parsing & matching',desc:'Balanced brackets, expression parsing'},
+      {name:'Recursion → iteration',desc:'Explicit stack to avoid stack overflow'},
+      {name:'Expression evaluation',desc:'RPN / postfix evaluation'},
+    ],
+    problems:[
+      {n:20,name:'Valid Parentheses',diff:'E',lc:'https://leetcode.com/problems/valid-parentheses/',nc:'https://neetcode.io/problems/validate-parentheses'},
+      {n:155,name:'Min Stack',diff:'M',lc:'https://leetcode.com/problems/min-stack/',nc:'https://neetcode.io/problems/minimum-stack'},
+      {n:150,name:'Evaluate Reverse Polish Notation',diff:'M',lc:'https://leetcode.com/problems/evaluate-reverse-polish-notation/',nc:'https://neetcode.io/problems/evaluate-reverse-polish-notation'},
+      {n:22,name:'Generate Parentheses',diff:'M',lc:'https://leetcode.com/problems/generate-parentheses/',nc:'https://neetcode.io/problems/generate-parentheses'},
+      {n:739,name:'Daily Temperatures',diff:'M',lc:'https://leetcode.com/problems/daily-temperatures/',nc:'https://neetcode.io/problems/daily-temperatures'},
+      {n:853,name:'Car Fleet',diff:'M',lc:'https://leetcode.com/problems/car-fleet/',nc:'https://neetcode.io/problems/car-fleet'},
+      {n:84,name:'Largest Rectangle in Histogram',diff:'H',lc:'https://leetcode.com/problems/largest-rectangle-in-histogram/',nc:'https://neetcode.io/problems/largest-rectangle-in-histogram'},
+    ],
+    design:[
+      {name:'Request lifecycle through a web service',desc:'DNS → LB → app → cache → DB'},
+      {name:'Logs vs metrics vs traces',desc:'The three pillars of observability'},
+      {name:'Alerting basics',desc:'Threshold, rate-based, anomaly'},
+      {name:'SLI, SLO, SLA',desc:'Error budgets and reliability targets'},
+    ],
+  },
+  {
+    id:4,name:'Binary Search',phase:'Search & Scan',
+    intro:'Simple in principle, painful in practice. Master the template once and then apply to search-the-answer problems.',
+    concepts:[
+      {name:'Classic template',desc:'Off-by-one pitfalls; left<=right vs left<right'},
+      {name:'Lower bound vs upper bound',desc:'bisect_left vs bisect_right'},
+      {name:'Binary search on answer space',desc:'When the input is not sorted but the answer is monotonic'},
+      {name:'2D matrix flatten',desc:'Treat mxn matrix as a flat sorted array'},
+      {name:'Rotated sorted array',desc:'Which half is sorted? Narrow accordingly'},
+    ],
+    problems:[
+      {n:704,name:'Binary Search',diff:'E',lc:'https://leetcode.com/problems/binary-search/',nc:'https://neetcode.io/problems/binary-search'},
+      {n:74,name:'Search a 2D Matrix',diff:'M',lc:'https://leetcode.com/problems/search-a-2d-matrix/',nc:'https://neetcode.io/problems/search-2d-matrix'},
+      {n:875,name:'Koko Eating Bananas',diff:'M',lc:'https://leetcode.com/problems/koko-eating-bananas/',nc:'https://neetcode.io/problems/eating-bananas'},
+      {n:153,name:'Find Minimum in Rotated Sorted Array',diff:'M',lc:'https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/',nc:'https://neetcode.io/problems/find-minimum-in-rotated-sorted-array'},
+      {n:33,name:'Search in Rotated Sorted Array',diff:'M',lc:'https://leetcode.com/problems/search-in-rotated-sorted-array/',nc:'https://neetcode.io/problems/find-target-in-rotated-sorted-array'},
+      {n:981,name:'Time Based Key-Value Store',diff:'M',lc:'https://leetcode.com/problems/time-based-key-value-store/',nc:'https://neetcode.io/problems/time-based-key-value-store'},
+      {n:4,name:'Median of Two Sorted Arrays',diff:'H',lc:'https://leetcode.com/problems/median-of-two-sorted-arrays/',nc:'https://neetcode.io/problems/median-of-two-sorted-arrays'},
+    ],
+    design:[
+      {name:'Replication basics',desc:'Why replicate? For reads, for durability, for availability'},
+      {name:'Leader-follower replication',desc:'Write path, read path, lag'},
+      {name:'Strong vs eventual consistency',desc:'The tradeoff spectrum'},
+      {name:'Partitioning (sharding)',desc:'Range vs hash vs consistent hashing'},
+    ],
+  },
+  {
+    id:5,name:'Sliding Window',phase:'Search & Scan',
+    intro:'Linear-time reasoning over contiguous subarrays/substrings. Expand then contract; maintain a window invariant.',
+    concepts:[
+      {name:'Fixed vs variable window',desc:'Known size vs grow-then-shrink'},
+      {name:'Window expansion & contraction',desc:'When to move each pointer'},
+      {name:'Window state / invariant',desc:'Counter, sum, max — what are we tracking?'},
+      {name:'Two pointers as window bounds',desc:'Left and right both monotonic'},
+      {name:'When to shrink',desc:'Invariant violated → tighten'},
+    ],
+    problems:[
+      {n:121,name:'Best Time to Buy and Sell Stock',diff:'E',lc:'https://leetcode.com/problems/best-time-to-buy-and-sell-stock/',nc:'https://neetcode.io/problems/buy-and-sell-crypto'},
+      {n:3,name:'Longest Substring Without Repeating Characters',diff:'M',lc:'https://leetcode.com/problems/longest-substring-without-repeating-characters/',nc:'https://neetcode.io/problems/longest-substring-without-duplicates'},
+      {n:424,name:'Longest Repeating Character Replacement',diff:'M',lc:'https://leetcode.com/problems/longest-repeating-character-replacement/',nc:'https://neetcode.io/problems/longest-repeating-substring-with-replacement'},
+      {n:567,name:'Permutation in String',diff:'M',lc:'https://leetcode.com/problems/permutation-in-string/',nc:'https://neetcode.io/problems/permutation-string'},
+      {n:76,name:'Minimum Window Substring',diff:'H',lc:'https://leetcode.com/problems/minimum-window-substring/',nc:'https://neetcode.io/problems/minimum-window-with-characters'},
+      {n:239,name:'Sliding Window Maximum',diff:'H',lc:'https://leetcode.com/problems/sliding-window-maximum/',nc:'https://neetcode.io/problems/sliding-window-maximum'},
+    ],
+    design:[
+      {name:'Read-heavy vs write-heavy systems',desc:'Design implications of each'},
+      {name:'SQL vs NoSQL',desc:'When relational, when document, when KV'},
+      {name:'Primary key, index, query path',desc:'Design for the read pattern'},
+      {name:'Normalization vs denormalization',desc:'Joins vs read amplification'},
+    ],
+  },
+  {
+    id:6,name:'Linked List',phase:'Search & Scan',
+    intro:'Pointer manipulation. Slow and deliberate beats clever. Draw pictures.',
+    concepts:[
+      {name:'Singly vs doubly linked',desc:'When back-pointers earn their keep'},
+      {name:'Dummy/sentinel head nodes',desc:'Eliminate edge cases at head'},
+      {name:"Floyd's cycle detection",desc:'Slow/fast pointers for cycles and midpoint'},
+      {name:'In-place reversal',desc:'prev/curr/next dance'},
+      {name:'Merging operations',desc:'Weaving two sorted lists'},
+      {name:'Pointer manipulation pitfalls',desc:'NPE, losing references, order of assignments'},
+    ],
+    problems:[
+      {n:206,name:'Reverse Linked List',diff:'E',lc:'https://leetcode.com/problems/reverse-linked-list/',nc:'https://neetcode.io/problems/reverse-a-linked-list'},
+      {n:21,name:'Merge Two Sorted Lists',diff:'E',lc:'https://leetcode.com/problems/merge-two-sorted-lists/',nc:'https://neetcode.io/problems/merge-two-sorted-linked-lists'},
+      {n:141,name:'Linked List Cycle',diff:'E',lc:'https://leetcode.com/problems/linked-list-cycle/',nc:'https://neetcode.io/problems/linked-list-cycle-detection'},
+      {n:143,name:'Reorder List',diff:'M',lc:'https://leetcode.com/problems/reorder-list/',nc:'https://neetcode.io/problems/reorder-linked-list'},
+      {n:19,name:'Remove Nth Node From End of List',diff:'M',lc:'https://leetcode.com/problems/remove-nth-node-from-end-of-list/',nc:'https://neetcode.io/problems/remove-node-from-end-of-linked-list'},
+      {n:138,name:'Copy List with Random Pointer',diff:'M',lc:'https://leetcode.com/problems/copy-list-with-random-pointer/',nc:'https://neetcode.io/problems/copy-linked-list-with-random-pointer'},
+      {n:2,name:'Add Two Numbers',diff:'M',lc:'https://leetcode.com/problems/add-two-numbers/',nc:'https://neetcode.io/problems/add-two-numbers'},
+      {n:287,name:'Find the Duplicate Number',diff:'M',lc:'https://leetcode.com/problems/find-the-duplicate-number/',nc:'https://neetcode.io/problems/find-duplicate-integer'},
+      {n:146,name:'LRU Cache',diff:'M',lc:'https://leetcode.com/problems/lru-cache/',nc:'https://neetcode.io/problems/lru-cache'},
+      {n:23,name:'Merge k Sorted Lists',diff:'H',lc:'https://leetcode.com/problems/merge-k-sorted-lists/',nc:'https://neetcode.io/problems/merge-k-sorted-linked-lists'},
+    ],
+    design:[
+      {name:'API design basics and REST',desc:'Resources, verbs, status codes'},
+      {name:'Idempotency',desc:'Retry-safe operations, idempotency keys'},
+      {name:'Retries, timeouts, backoff',desc:'Exponential backoff, jitter, deadlines'},
+      {name:'Pagination — offset vs cursor',desc:'Why cursors scale; stable ordering'},
+    ],
+  },
+  {
+    id:7,name:'Trees',phase:'Trees',
+    intro:'Recursion lives here. Almost every tree problem is a tiny recursion with a well-chosen return value.',
+    concepts:[
+      {name:'Recursion on trees',desc:'The tree itself mirrors the call stack'},
+      {name:'DFS: pre-, in-, post-order',desc:'When each ordering is useful'},
+      {name:'BFS / level order',desc:'Queue-based, layer by layer'},
+      {name:'BST invariant',desc:'Left < root < right, in-order gives sorted'},
+      {name:'Tree height/depth',desc:'Recursive definitions'},
+      {name:'Balanced trees',desc:'What "balanced" means, why it matters'},
+      {name:'Tree serialization',desc:'Preorder with nulls, level-order'},
+    ],
+    problems:[
+      {n:226,name:'Invert Binary Tree',diff:'E',lc:'https://leetcode.com/problems/invert-binary-tree/',nc:'https://neetcode.io/problems/invert-a-binary-tree'},
+      {n:104,name:'Maximum Depth of Binary Tree',diff:'E',lc:'https://leetcode.com/problems/maximum-depth-of-binary-tree/',nc:'https://neetcode.io/problems/depth-of-binary-tree'},
+      {n:543,name:'Diameter of Binary Tree',diff:'E',lc:'https://leetcode.com/problems/diameter-of-binary-tree/',nc:'https://neetcode.io/problems/binary-tree-diameter'},
+      {n:100,name:'Same Tree',diff:'E',lc:'https://leetcode.com/problems/same-tree/',nc:'https://neetcode.io/problems/same-binary-tree'},
+      {n:235,name:'Lowest Common Ancestor of a BST',diff:'M',lc:'https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/',nc:'https://neetcode.io/problems/lowest-common-ancestor-in-binary-search-tree'},
+      {n:102,name:'Binary Tree Level Order Traversal',diff:'M',lc:'https://leetcode.com/problems/binary-tree-level-order-traversal/',nc:'https://neetcode.io/problems/level-order-traversal-of-binary-tree'},
+      {n:199,name:'Binary Tree Right Side View',diff:'M',lc:'https://leetcode.com/problems/binary-tree-right-side-view/',nc:'https://neetcode.io/problems/binary-tree-right-side-view'},
+      {n:98,name:'Validate Binary Search Tree',diff:'M',lc:'https://leetcode.com/problems/validate-binary-search-tree/',nc:'https://neetcode.io/problems/valid-binary-search-tree'},
+      {n:124,name:'Binary Tree Maximum Path Sum',diff:'H',lc:'https://leetcode.com/problems/binary-tree-maximum-path-sum/',nc:'https://neetcode.io/problems/binary-tree-maximum-path-sum'},
+      {n:297,name:'Serialize and Deserialize Binary Tree',diff:'H',lc:'https://leetcode.com/problems/serialize-and-deserialize-binary-tree/',nc:'https://neetcode.io/problems/serialize-and-deserialize-binary-tree'},
+    ],
+    design:[
+      {name:'Service decomposition',desc:'Monolith → services; bounded contexts'},
+      {name:'Secondary indexes',desc:'Why they exist and what they cost'},
+      {name:'Hierarchical data modeling',desc:'Adjacency list, path enumeration, nested sets'},
+      {name:'Metadata services',desc:'Catalog patterns, lookups'},
+    ],
+  },
+  {
+    id:8,name:'Tries',phase:'Trees',
+    intro:'A specialized tree for prefix queries. Small family of problems, but interview-popular.',
+    concepts:[
+      {name:'Prefix tree structure',desc:'Children by character, terminal flag'},
+      {name:'Insert / search / startsWith',desc:'The three core ops'},
+      {name:'Wildcard matching',desc:'DFS over children when . is encountered'},
+      {name:'Word bank + DFS combo',desc:'Trie as the pruning structure for grid search'},
+      {name:'Compressed tries (radix)',desc:'Conceptual awareness only'},
+    ],
+    problems:[
+      {n:208,name:'Implement Trie (Prefix Tree)',diff:'M',lc:'https://leetcode.com/problems/implement-trie-prefix-tree/',nc:'https://neetcode.io/problems/implement-prefix-tree'},
+      {n:211,name:'Design Add and Search Words Data Structure',diff:'M',lc:'https://leetcode.com/problems/design-add-and-search-words-data-structure/',nc:'https://neetcode.io/problems/design-word-search-data-structure'},
+      {n:212,name:'Word Search II',diff:'H',lc:'https://leetcode.com/problems/word-search-ii/',nc:'https://neetcode.io/problems/search-for-word-ii'},
+      {n:648,name:'Replace Words',diff:'M',lc:'https://leetcode.com/problems/replace-words/',nc:null},
+      {n:642,name:'Design Search Autocomplete System',diff:'H',prem:1,lc:'https://leetcode.com/problems/design-search-autocomplete-system/',nc:null},
+    ],
+    design:[
+      {name:'Autocomplete system basics',desc:'Prefix index, top-k ranking, latency budget'},
+      {name:'Indexing for prefix queries',desc:'Trie vs sorted+binary search'},
+      {name:'Dictionary service',desc:'Lexicon-backed retrieval, hot-path lookups'},
+      {name:'Precomputation vs online computation',desc:'Where to pay the cost'},
+    ],
+  },
+  {
+    id:9,name:'Heap / Priority Queue',phase:'Trees',
+    intro:'When you need the smallest/largest k things, a heap is almost always the answer.',
+    concepts:[
+      {name:'Min-heap vs max-heap',desc:'Python: heapq is min-heap; negate for max'},
+      {name:'Heapify O(n)',desc:'Build from array in linear time'},
+      {name:'Kth element pattern',desc:'Heap of size k → O(n log k)'},
+      {name:'Two-heap pattern',desc:'Median via max-heap of lower half + min-heap of upper half'},
+      {name:'Custom comparators',desc:'Tuples, __lt__, negated keys'},
+    ],
+    problems:[
+      {n:703,name:'Kth Largest Element in a Stream',diff:'E',lc:'https://leetcode.com/problems/kth-largest-element-in-a-stream/',nc:'https://neetcode.io/problems/kth-largest-integer-in-a-stream'},
+      {n:1046,name:'Last Stone Weight',diff:'E',lc:'https://leetcode.com/problems/last-stone-weight/',nc:'https://neetcode.io/problems/last-stone-weight'},
+      {n:973,name:'K Closest Points to Origin',diff:'M',lc:'https://leetcode.com/problems/k-closest-points-to-origin/',nc:'https://neetcode.io/problems/k-closest-points-to-origin'},
+      {n:215,name:'Kth Largest Element in an Array',diff:'M',lc:'https://leetcode.com/problems/kth-largest-element-in-an-array/',nc:'https://neetcode.io/problems/kth-largest-element-in-an-array'},
+      {n:621,name:'Task Scheduler',diff:'M',lc:'https://leetcode.com/problems/task-scheduler/',nc:'https://neetcode.io/problems/task-scheduling'},
+      {n:355,name:'Design Twitter',diff:'M',lc:'https://leetcode.com/problems/design-twitter/',nc:'https://neetcode.io/problems/design-twitter-feed'},
+      {n:295,name:'Find Median from Data Stream',diff:'H',lc:'https://leetcode.com/problems/find-median-from-data-stream/',nc:'https://neetcode.io/problems/find-median-in-a-data-stream'},
+    ],
+    design:[
+      {name:'Message queues basics',desc:'Producer, consumer, broker, delivery semantics'},
+      {name:'Queue vs pub/sub',desc:'Work distribution vs fanout'},
+      {name:'Kafka — partitions and consumers',desc:'Ordering guarantees, consumer groups'},
+      {name:'Backpressure basics',desc:'What happens when consumers fall behind'},
+    ],
+  },
+  {
+    id:10,name:'Backtracking',phase:'Recursion & Graphs',
+    intro:'Structured brute force. Choose, explore, unchoose. Prune when you can.',
+    concepts:[
+      {name:'Recursion tree visualization',desc:'Sketch the tree before coding'},
+      {name:'Choose / explore / unchoose',desc:'The backtracking skeleton'},
+      {name:'Pruning branches',desc:'Cut branches that cannot lead to solutions'},
+      {name:'Handling duplicates',desc:'Sort + skip-on-same-as-previous'},
+      {name:'Combinations vs permutations vs subsets',desc:'When order matters, when it does not'},
+    ],
+    problems:[
+      {n:78,name:'Subsets',diff:'M',lc:'https://leetcode.com/problems/subsets/',nc:'https://neetcode.io/problems/subsets'},
+      {n:39,name:'Combination Sum',diff:'M',lc:'https://leetcode.com/problems/combination-sum/',nc:'https://neetcode.io/problems/combination-target-sum'},
+      {n:46,name:'Permutations',diff:'M',lc:'https://leetcode.com/problems/permutations/',nc:'https://neetcode.io/problems/permutations'},
+      {n:90,name:'Subsets II',diff:'M',lc:'https://leetcode.com/problems/subsets-ii/',nc:'https://neetcode.io/problems/subsets-ii'},
+      {n:40,name:'Combination Sum II',diff:'M',lc:'https://leetcode.com/problems/combination-sum-ii/',nc:'https://neetcode.io/problems/combination-target-sum-ii'},
+      {n:79,name:'Word Search',diff:'M',lc:'https://leetcode.com/problems/word-search/',nc:'https://neetcode.io/problems/search-for-word'},
+      {n:131,name:'Palindrome Partitioning',diff:'M',lc:'https://leetcode.com/problems/palindrome-partitioning/',nc:'https://neetcode.io/problems/palindrome-partitioning'},
+      {n:17,name:'Letter Combinations of a Phone Number',diff:'M',lc:'https://leetcode.com/problems/letter-combinations-of-a-phone-number/',nc:'https://neetcode.io/problems/combinations-of-a-phone-number'},
+      {n:51,name:'N-Queens',diff:'H',lc:'https://leetcode.com/problems/n-queens/',nc:'https://neetcode.io/problems/n-queens'},
+    ],
+    design:[
+      {name:'Search space explosion & pruning',desc:'How to reason about exponential spaces'},
+      {name:'Brute force vs guided search',desc:'When structure lets you be smarter'},
+      {name:'Branch-and-bound intuition',desc:'Bound the search with known limits'},
+      {name:'State tracking and rollback',desc:'Transactions, compensations, sagas'},
+    ],
+  },
+  {
+    id:11,name:'Graphs',phase:'Recursion & Graphs',
+    intro:'BFS and DFS generalize from trees. Most graph interview problems are one of these two plus a representation choice.',
+    concepts:[
+      {name:'Adjacency list vs matrix',desc:'Memory & time tradeoffs'},
+      {name:'DFS on graphs',desc:'Visited set, recursion or stack'},
+      {name:'BFS (shortest path, unweighted)',desc:'Queue, level-by-level'},
+      {name:'Directed vs undirected',desc:'Double edges, cycle implications'},
+      {name:'Cycle detection',desc:'DFS with color states; Union-Find for undirected'},
+      {name:'Connected components',desc:'Traverse-and-count pattern'},
+      {name:'Topological sort (intro)',desc:"Kahn's BFS / DFS post-order reverse"},
+    ],
+    problems:[
+      {n:200,name:'Number of Islands',diff:'M',lc:'https://leetcode.com/problems/number-of-islands/',nc:'https://neetcode.io/problems/count-number-of-islands'},
+      {n:695,name:'Max Area of Island',diff:'M',lc:'https://leetcode.com/problems/max-area-of-island/',nc:'https://neetcode.io/problems/max-area-of-island'},
+      {n:133,name:'Clone Graph',diff:'M',lc:'https://leetcode.com/problems/clone-graph/',nc:'https://neetcode.io/problems/clone-graph'},
+      {n:994,name:'Rotting Oranges',diff:'M',lc:'https://leetcode.com/problems/rotting-oranges/',nc:'https://neetcode.io/problems/rotting-fruit'},
+      {n:417,name:'Pacific Atlantic Water Flow',diff:'M',lc:'https://leetcode.com/problems/pacific-atlantic-water-flow/',nc:'https://neetcode.io/problems/pacific-atlantic-water-flow'},
+      {n:130,name:'Surrounded Regions',diff:'M',lc:'https://leetcode.com/problems/surrounded-regions/',nc:'https://neetcode.io/problems/surrounded-regions'},
+      {n:207,name:'Course Schedule',diff:'M',lc:'https://leetcode.com/problems/course-schedule/',nc:'https://neetcode.io/problems/course-schedule'},
+      {n:210,name:'Course Schedule II',diff:'M',lc:'https://leetcode.com/problems/course-schedule-ii/',nc:'https://neetcode.io/problems/course-schedule-ii'},
+      {n:684,name:'Redundant Connection',diff:'M',lc:'https://leetcode.com/problems/redundant-connection/',nc:'https://neetcode.io/problems/redundant-connection'},
+      {n:127,name:'Word Ladder',diff:'H',lc:'https://leetcode.com/problems/word-ladder/',nc:'https://neetcode.io/problems/word-ladder'},
+    ],
+    design:[
+      {name:'Dependency & network graphs',desc:'Service mesh, call graph'},
+      {name:'Service dependency graphs',desc:'Understanding blast radius'},
+      {name:'Failure domains & blast radius',desc:'Isolation boundaries'},
+      {name:'DAGs in pipelines & orchestration',desc:'Airflow, Kafka Streams topologies'},
+    ],
+  },
+  {
+    id:12,name:'Advanced Graphs',phase:'Recursion & Graphs',
+    intro:'Shortest paths, spanning trees, topological sort. Interview frequency is lower, but impact is high when they appear.',
+    concepts:[
+      {name:"Dijkstra's algorithm",desc:'Non-negative weights, min-heap'},
+      {name:'Bellman-Ford',desc:'Handles negative weights; O(VE)'},
+      {name:'MST: Prim & Kruskal',desc:'Minimum spanning tree — two standard approaches'},
+      {name:'Union-Find (DSU)',desc:'Path compression + union by rank; near-O(1)'},
+      {name:'Topological sort',desc:"Kahn's BFS, DFS post-order reverse"},
+      {name:'Euler path/circuit',desc:"Hierholzer's — every edge exactly once"},
+    ],
+    problems:[
+      {n:743,name:'Network Delay Time',diff:'M',lc:'https://leetcode.com/problems/network-delay-time/',nc:'https://neetcode.io/problems/network-delay-time'},
+      {n:1584,name:'Min Cost to Connect All Points',diff:'M',lc:'https://leetcode.com/problems/min-cost-to-connect-all-points/',nc:'https://neetcode.io/problems/min-cost-to-connect-points'},
+      {n:787,name:'Cheapest Flights Within K Stops',diff:'M',lc:'https://leetcode.com/problems/cheapest-flights-within-k-stops/',nc:'https://neetcode.io/problems/cheapest-flights-within-k-stops'},
+      {n:332,name:'Reconstruct Itinerary',diff:'H',lc:'https://leetcode.com/problems/reconstruct-itinerary/',nc:'https://neetcode.io/problems/reconstruct-flight-path'},
+      {n:778,name:'Swim in Rising Water',diff:'H',lc:'https://leetcode.com/problems/swim-in-rising-water/',nc:'https://neetcode.io/problems/swim-in-rising-water'},
+      {n:269,name:'Alien Dictionary',diff:'H',prem:1,lc:'https://leetcode.com/problems/alien-dictionary/',nc:'https://neetcode.io/problems/foreign-dictionary'},
+    ],
+    design:[
+      {name:'Shortest-path routing',desc:'Applied to networks and route planners'},
+      {name:'MST in network design',desc:'Cheapest spanning infrastructure'},
+      {name:'Distributed consensus & ordering',desc:'Raft / Paxos awareness'},
+      {name:'Multi-hop cost optimization',desc:'Routing with budget constraints'},
+    ],
+  },
+  {
+    id:13,name:'1-D DP',phase:'DP & Optimization',
+    intro:'Dynamic programming, starting with linear state. Define state, transition, base case, then optimize space.',
+    concepts:[
+      {name:'Memoization vs tabulation',desc:'Top-down vs bottom-up; same recurrence'},
+      {name:'State definition',desc:'What does dp[i] mean? Be precise'},
+      {name:'Transition function',desc:'dp[i] expressed in terms of earlier states'},
+      {name:'Base cases',desc:'The smallest problems where the answer is obvious'},
+      {name:'Space optimization',desc:'Rolling array when only last k states matter'},
+      {name:'Subsequence vs substring',desc:"Different state shapes"},
+    ],
+    problems:[
+      {n:70,name:'Climbing Stairs',diff:'E',lc:'https://leetcode.com/problems/climbing-stairs/',nc:'https://neetcode.io/problems/climbing-stairs'},
+      {n:198,name:'House Robber',diff:'M',lc:'https://leetcode.com/problems/house-robber/',nc:'https://neetcode.io/problems/house-robber'},
+      {n:213,name:'House Robber II',diff:'M',lc:'https://leetcode.com/problems/house-robber-ii/',nc:'https://neetcode.io/problems/house-robber-ii'},
+      {n:5,name:'Longest Palindromic Substring',diff:'M',lc:'https://leetcode.com/problems/longest-palindromic-substring/',nc:'https://neetcode.io/problems/longest-palindromic-substring'},
+      {n:647,name:'Palindromic Substrings',diff:'M',lc:'https://leetcode.com/problems/palindromic-substrings/',nc:'https://neetcode.io/problems/palindromic-substrings'},
+      {n:91,name:'Decode Ways',diff:'M',lc:'https://leetcode.com/problems/decode-ways/',nc:'https://neetcode.io/problems/decode-ways'},
+      {n:322,name:'Coin Change',diff:'M',lc:'https://leetcode.com/problems/coin-change/',nc:'https://neetcode.io/problems/coin-change'},
+      {n:152,name:'Maximum Product Subarray',diff:'M',lc:'https://leetcode.com/problems/maximum-product-subarray/',nc:'https://neetcode.io/problems/maximum-product-subarray'},
+      {n:139,name:'Word Break',diff:'M',lc:'https://leetcode.com/problems/word-break/',nc:'https://neetcode.io/problems/word-break'},
+      {n:300,name:'Longest Increasing Subsequence',diff:'M',lc:'https://leetcode.com/problems/longest-increasing-subsequence/',nc:'https://neetcode.io/problems/longest-increasing-subsequence'},
+      {n:416,name:'Partition Equal Subset Sum',diff:'M',lc:'https://leetcode.com/problems/partition-equal-subset-sum/',nc:'https://neetcode.io/problems/partition-equal-subset-sum'},
+    ],
+    design:[
+      {name:'Memoization as caching analogy',desc:'Same idea in a different context'},
+      {name:'Local optimum vs global objective',desc:'When local greedy fails'},
+      {name:'Minimizing cost under constraints',desc:'Resource allocation mental model'},
+      {name:'State compression',desc:'Representing state compactly when the domain allows'},
+    ],
+  },
+  {
+    id:14,name:'2-D DP',phase:'DP & Optimization',
+    intro:'Two-dimensional state. Grid DP, string alignment, knapsack. The patterns repeat.',
+    concepts:[
+      {name:'Grid DP (paths, obstacles)',desc:'dp[i][j] from dp[i-1][j] and dp[i][j-1]'},
+      {name:'String DP (LCS, edit distance)',desc:'Two strings → 2-D state'},
+      {name:'Subsequence DP',desc:'Include/exclude decisions'},
+      {name:'Knapsack variants (0/1, unbounded)',desc:"The archetypal 2-D DP"},
+      {name:'Interval DP',desc:'dp[i][j] over ranges, split point'},
+      {name:'State compression in 2-D',desc:"Two rows instead of full matrix"},
+    ],
+    problems:[
+      {n:62,name:'Unique Paths',diff:'M',lc:'https://leetcode.com/problems/unique-paths/',nc:'https://neetcode.io/problems/count-paths'},
+      {n:1143,name:'Longest Common Subsequence',diff:'M',lc:'https://leetcode.com/problems/longest-common-subsequence/',nc:'https://neetcode.io/problems/longest-common-subsequence'},
+      {n:309,name:'Best Time to Buy and Sell Stock with Cooldown',diff:'M',lc:'https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/',nc:'https://neetcode.io/problems/buy-and-sell-crypto-with-cooldown'},
+      {n:518,name:'Coin Change II',diff:'M',lc:'https://leetcode.com/problems/coin-change-ii/',nc:'https://neetcode.io/problems/coin-change-ii'},
+      {n:494,name:'Target Sum',diff:'M',lc:'https://leetcode.com/problems/target-sum/',nc:'https://neetcode.io/problems/target-sum'},
+      {n:97,name:'Interleaving String',diff:'M',lc:'https://leetcode.com/problems/interleaving-string/',nc:'https://neetcode.io/problems/interleaving-string'},
+      {n:72,name:'Edit Distance',diff:'M',lc:'https://leetcode.com/problems/edit-distance/',nc:'https://neetcode.io/problems/edit-distance'},
+      {n:329,name:'Longest Increasing Path in a Matrix',diff:'H',lc:'https://leetcode.com/problems/longest-increasing-path-in-a-matrix/',nc:'https://neetcode.io/problems/longest-increasing-path-in-matrix'},
+      {n:115,name:'Distinct Subsequences',diff:'H',lc:'https://leetcode.com/problems/distinct-subsequences/',nc:'https://neetcode.io/problems/count-subsequences'},
+      {n:10,name:'Regular Expression Matching',diff:'H',lc:'https://leetcode.com/problems/regular-expression-matching/',nc:'https://neetcode.io/problems/regular-expression-matching'},
+    ],
+    design:[
+      {name:'Grid/matrix computation',desc:'When problems map to spatial DP'},
+      {name:'String alignment (diff/merge)',desc:'Edit distance in version control, bioinformatics'},
+      {name:'Knapsack variants in allocation',desc:'Budgeted decisions at scale'},
+      {name:'Multi-dimensional caching',desc:'Composite keys, eviction policy'},
+    ],
+  },
+  {
+    id:15,name:'Intervals',phase:'DP & Optimization',
+    intro:'Sort by start or end, then scan. A small pattern, but it comes up constantly.',
+    concepts:[
+      {name:'Sort by start / end',desc:'Which to choose depends on the problem'},
+      {name:'Merge-overlap pattern',desc:"If current.start <= last.end, merge"},
+      {name:'Sweep line',desc:'Events at start (+1) and end (-1)'},
+      {name:'Min-heap for active intervals',desc:'Meeting rooms, active-count problems'},
+      {name:'Overlap detection',desc:'max(starts) < min(ends)'},
+    ],
+    problems:[
+      {n:57,name:'Insert Interval',diff:'M',lc:'https://leetcode.com/problems/insert-interval/',nc:'https://neetcode.io/problems/insert-new-interval'},
+      {n:56,name:'Merge Intervals',diff:'M',lc:'https://leetcode.com/problems/merge-intervals/',nc:'https://neetcode.io/problems/merge-intervals'},
+      {n:435,name:'Non-overlapping Intervals',diff:'M',lc:'https://leetcode.com/problems/non-overlapping-intervals/',nc:'https://neetcode.io/problems/non-overlapping-intervals'},
+      {n:252,name:'Meeting Rooms',diff:'E',prem:1,lc:'https://leetcode.com/problems/meeting-rooms/',nc:'https://neetcode.io/problems/meeting-schedule'},
+      {n:253,name:'Meeting Rooms II',diff:'M',prem:1,lc:'https://leetcode.com/problems/meeting-rooms-ii/',nc:'https://neetcode.io/problems/meeting-schedule-ii'},
+      {n:1851,name:'Minimum Interval to Include Each Query',diff:'H',lc:'https://leetcode.com/problems/minimum-interval-to-include-each-query/',nc:'https://neetcode.io/problems/minimum-interval-including-query'},
+    ],
+    design:[
+      {name:'Scheduling systems basics',desc:'Resource allocation over time'},
+      {name:'Conflict resolution in scheduling',desc:'Priority, preemption, merge'},
+      {name:'Optimistic vs pessimistic concurrency',desc:'Locks vs CAS vs version checks'},
+      {name:'Distributed locks basics',desc:'Leases, fencing tokens'},
+    ],
+  },
+  {
+    id:16,name:'Greedy',phase:'DP & Optimization',
+    intro:'Sometimes the local optimum is the global optimum. The hard part is proving it (or finding the counter-example).',
+    concepts:[
+      {name:'Greedy choice property',desc:'What it is and why it is non-trivial to show'},
+      {name:'Exchange argument',desc:'Proof pattern: any other solution can be transformed without loss'},
+      {name:'Sort then scan',desc:"Most greedy problems start with sorting"},
+      {name:'When greedy fails',desc:'Recognize when you need DP instead'},
+      {name:'Counter-example thinking',desc:'Stress-test before committing'},
+    ],
+    problems:[
+      {n:53,name:'Maximum Subarray',diff:'M',lc:'https://leetcode.com/problems/maximum-subarray/',nc:'https://neetcode.io/problems/maximum-subarray'},
+      {n:55,name:'Jump Game',diff:'M',lc:'https://leetcode.com/problems/jump-game/',nc:'https://neetcode.io/problems/jump-game'},
+      {n:45,name:'Jump Game II',diff:'M',lc:'https://leetcode.com/problems/jump-game-ii/',nc:'https://neetcode.io/problems/jump-game-ii'},
+      {n:134,name:'Gas Station',diff:'M',lc:'https://leetcode.com/problems/gas-station/',nc:'https://neetcode.io/problems/gas-station'},
+      {n:846,name:'Hand of Straights',diff:'M',lc:'https://leetcode.com/problems/hand-of-straights/',nc:'https://neetcode.io/problems/hand-of-straights'},
+      {n:1899,name:'Merge Triplets to Form Target Triplet',diff:'M',lc:'https://leetcode.com/problems/merge-triplets-to-form-target-triplet/',nc:'https://neetcode.io/problems/merge-triplets-to-form-target'},
+      {n:763,name:'Partition Labels',diff:'M',lc:'https://leetcode.com/problems/partition-labels/',nc:'https://neetcode.io/problems/partition-labels'},
+      {n:678,name:'Valid Parenthesis String',diff:'M',lc:'https://leetcode.com/problems/valid-parenthesis-string/',nc:'https://neetcode.io/problems/valid-parenthesis-string'},
+    ],
+    design:[
+      {name:'Greedy choice and feasibility',desc:'When simple heuristics suffice'},
+      {name:'Greedy optimization',desc:'Frontier expansion, always take the cheapest'},
+      {name:'Cost-aware routing',desc:'Greedy approximations for hard problems'},
+      {name:'Admission control',desc:'Greedy acceptance/rejection under load'},
+    ],
+  },
+  {
+    id:17,name:'Bit Manipulation',phase:'Numerics',
+    intro:'Niche but elegant. Master the vocabulary once; these tricks are permanent.',
+    concepts:[
+      {name:'AND, OR, XOR, NOT',desc:'The core operators'},
+      {name:'Left shift, right shift',desc:'Multiplication/division by 2^k'},
+      {name:'Masks and bit checks',desc:'n & (1<<i); set/clear/toggle'},
+      {name:'XOR tricks',desc:'a ^ a = 0; finding the singleton'},
+      {name:'Counting bits',desc:"Brian Kernighan's trick: n & (n-1)"},
+      {name:'Bitmask DP',desc:'Represent subset as an int'},
+    ],
+    problems:[
+      {n:136,name:'Single Number',diff:'E',lc:'https://leetcode.com/problems/single-number/',nc:'https://neetcode.io/problems/single-number'},
+      {n:191,name:'Number of 1 Bits',diff:'E',lc:'https://leetcode.com/problems/number-of-1-bits/',nc:'https://neetcode.io/problems/number-of-one-bits'},
+      {n:338,name:'Counting Bits',diff:'E',lc:'https://leetcode.com/problems/counting-bits/',nc:'https://neetcode.io/problems/counting-bits'},
+      {n:190,name:'Reverse Bits',diff:'E',lc:'https://leetcode.com/problems/reverse-bits/',nc:'https://neetcode.io/problems/reverse-bits'},
+      {n:268,name:'Missing Number',diff:'E',lc:'https://leetcode.com/problems/missing-number/',nc:'https://neetcode.io/problems/missing-number'},
+      {n:371,name:'Sum of Two Integers',diff:'M',lc:'https://leetcode.com/problems/sum-of-two-integers/',nc:'https://neetcode.io/problems/sum-of-two-integers'},
+      {n:7,name:'Reverse Integer',diff:'M',lc:'https://leetcode.com/problems/reverse-integer/',nc:'https://neetcode.io/problems/reverse-integer'},
+    ],
+    design:[
+      {name:'Bitmask DP & compact state',desc:'Representing feature sets or visited nodes'},
+      {name:'Feature flags and configuration',desc:'Packed config representation'},
+      {name:'Checksums and error detection',desc:'CRC, parity, hashing'},
+      {name:'Bloom filters',desc:'Probabilistic set membership'},
+    ],
+  },
+  {
+    id:18,name:'Math & Geometry',phase:'Numerics',
+    intro:'A grab-bag. Matrix manipulation, modular arithmetic, and a few classics that every candidate is expected to know.',
+    concepts:[
+      {name:'Matrix manipulation',desc:'Rotate in place, transpose'},
+      {name:'Spiral traversal',desc:'Boundary-shrinking pattern'},
+      {name:'Modular arithmetic',desc:'(a + b) % m, (a * b) % m, negative mod'},
+      {name:'Fast exponentiation',desc:'O(log n) pow via squaring'},
+      {name:'Coordinate geometry',desc:'Distance, slope, squares/rectangles'},
+      {name:'Cycle detection in numbers',desc:'Happy number — Floyd applies'},
+    ],
+    problems:[
+      {n:48,name:'Rotate Image',diff:'M',lc:'https://leetcode.com/problems/rotate-image/',nc:'https://neetcode.io/problems/rotate-matrix'},
+      {n:54,name:'Spiral Matrix',diff:'M',lc:'https://leetcode.com/problems/spiral-matrix/',nc:'https://neetcode.io/problems/spiral-matrix'},
+      {n:73,name:'Set Matrix Zeroes',diff:'M',lc:'https://leetcode.com/problems/set-matrix-zeroes/',nc:'https://neetcode.io/problems/set-zeroes-in-matrix'},
+      {n:202,name:'Happy Number',diff:'E',lc:'https://leetcode.com/problems/happy-number/',nc:'https://neetcode.io/problems/non-cycical-number'},
+      {n:66,name:'Plus One',diff:'E',lc:'https://leetcode.com/problems/plus-one/',nc:'https://neetcode.io/problems/plus-one'},
+      {n:50,name:'Pow(x, n)',diff:'M',lc:'https://leetcode.com/problems/powx-n/',nc:'https://neetcode.io/problems/pow-x-n'},
+      {n:43,name:'Multiply Strings',diff:'M',lc:'https://leetcode.com/problems/multiply-strings/',nc:'https://neetcode.io/problems/multiply-strings'},
+      {n:2013,name:'Detect Squares',diff:'M',lc:'https://leetcode.com/problems/detect-squares/',nc:'https://neetcode.io/problems/count-squares'},
+    ],
+    design:[
+      {name:'Coordinate systems & transforms',desc:'Where math meets engineering'},
+      {name:'Modular hashing',desc:'Hash-table uniformity, consistent hashing'},
+      {name:'Geohashing / spatial indexing',desc:'Location-based services'},
+      {name:'Randomization & sampling',desc:'Reservoir sampling, weighted choice'},
+    ],
+  },
+];
+
+const PHASES=['Foundations','Search & Scan','Trees','Recursion & Graphs','DP & Optimization','Numerics'];
+const PHASE_COLORS=['#534AB7','#1D9E75','#3B6D11','#D85A30','#BA7517','#8B6B14'];
+const DOT_CLASSES=['dot-f','dot-f1','dot-f2','dot-f3','dot-f4','dot-f5'];
+
+// =============================================================
+// STATE & STORAGE
+// =============================================================
+function defTopicState(topic){
+  const s={problems:{},concepts:{},design:{},notes:'',conceptNotes:'',designNotes:''};
+  topic.problems.forEach(p=>{
+    s.problems[p.n]={status:'Not Started',color:null,conf:0,time:'',notes:'',timed:false,explain:false,redo:false};
+  });
+  topic.concepts.forEach((c,i)=>{s.concepts[i]=false;});
+  topic.design.forEach((d,i)=>{s.design[i]={checked:false,status:'Not Started'};});
+  return s;
+}
+
+const KEY=t=>`ip_topic_${t}`;
+async function load(t){try{const r=await window.storage.get(KEY(t));return r?JSON.parse(r.value):null;}catch{return null;}}
+async function save(t,v){try{await window.storage.set(KEY(t),JSON.stringify(v));}catch{}}
+
+let CT=1, DATA=null, EXP={}, timers={};
+
+function getTopic(){return TOPICS[CT-1];}
+function get(){return DATA;}
+function patch(obj){
+  DATA={...DATA,...obj};
+  render();
+  clearTimeout(timers[CT]);
+  timers[CT]=setTimeout(()=>save(CT,DATA),400);
+}
+function patchProblem(n,obj){
+  DATA.problems[n]={...DATA.problems[n],...obj};
+  render();
+  clearTimeout(timers[CT]);
+  timers[CT]=setTimeout(()=>save(CT,DATA),400);
+}
+function patchConcept(i,v){
+  DATA.concepts[i]=v;
+  render();
+  clearTimeout(timers[CT]);
+  timers[CT]=setTimeout(()=>save(CT,DATA),400);
+}
+function patchDesign(i,obj){
+  DATA.design[i]={...DATA.design[i],...obj};
+  render();
+  clearTimeout(timers[CT]);
+  timers[CT]=setTimeout(()=>save(CT,DATA),400);
+}
+
+async function loadTopic(t){
+  const topic=TOPICS[t-1];
+  const saved=await load(t);
+  const defs=defTopicState(topic);
+  if(saved){
+    // merge shallow; handle new problems/concepts/design added later
+    DATA={...defs,...saved,
+      problems:{...defs.problems,...(saved.problems||{})},
+      concepts:{...defs.concepts,...(saved.concepts||{})},
+      design:{...defs.design,...(saved.design||{})}};
+  } else {
+    DATA=defs;
+  }
+  render();
+}
+
+// =============================================================
+// RENDERING
+// =============================================================
+function diffBadge(d){const m={'E':'Easy','M':'Medium','H':'Hard'};return`<span class="diff-badge diff-${d}">${m[d]||d}</span>`;}
+
+function renderTopicHeader(topic){
+  const phaseIdx=PHASES.indexOf(topic.phase);
+  const color=PHASE_COLORS[phaseIdx];
+  const totalP=topic.problems.length;
+  const solvedP=Object.values(DATA.problems).filter(p=>p.status==='Solved Cleanly').length;
+  const pct=totalP>0?Math.round(100*solvedP/totalP):0;
+  return`<div class="topic-header-card">
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+      <span class="pill pill-purple">Topic ${topic.id}/18</span>
+      <span class="phase-badge" style="background:${color};color:#fff">${topic.phase}</span>
+      <span style="font-size:11px;color:var(--muted);margin-left:auto">${solvedP}/${totalP} solved cleanly</span>
+    </div>
+    <div class="topic-intro">${topic.intro}</div>
+    <div class="progress-bar"><div class="progress-fill" style="width:${pct}%;background:${color}"></div></div>
+  </div>`;
+}
+
+function renderConcepts(topic){
+  const rows=topic.concepts.map((c,i)=>{
+    const done=DATA.concepts[i];
+    return`<div class="concept-row${done?' done':''}">
+      <input type="checkbox" ${done?'checked':''} onchange="patchConcept(${i},this.checked)">
+      <div class="concept-body">
+        <div class="c-name">${c.name}</div>
+        <div class="c-desc">${c.desc}</div>
+      </div>
+    </div>`;
+  }).join('');
+  const k='concepts-n';
+  return`<div class="card card-purple">
+    <div class="section">
+      <div class="section-label" style="margin-top:14px">🗺️ Concepts to Learn</div>
+      ${rows}
+      <button class="notes-toggle" onclick="toggleExp('${k}')">${EXP[k]?'▼':'▶'} Concept notes</button>
+      ${EXP[k]?`<textarea class="notes" placeholder="What clicked · Mental models · Things I keep forgetting · Questions to revisit..." oninput="patch({conceptNotes:this.value})">${DATA.conceptNotes||''}</textarea>`:''}
+    </div>
+  </div>`;
+}
+
+function renderProblem(p){
+  const s=DATA.problems[p.n]||{status:'Not Started',color:null,conf:0,time:'',notes:'',timed:false,explain:false,redo:false};
+  const border=s.color==='green'?'card-green':s.color==='yellow'?'card-yellow':s.color==='red'?'card-red':'';
+  const k=`p${p.n}-n`;
+  return`<div class="card ${border}">
+    <div class="card-head">
+      <span class="prob-n">#${p.n}</span>
+      <span class="problem-name">${p.name}${p.prem?'<span class="prem-badge">Premium</span>':''}</span>
+      ${diffBadge(p.diff)}
+    </div>
+    <div class="card-links">
+      <a class="link-btn" href="${p.lc}" target="_blank" rel="noopener">LeetCode</a>
+      ${p.nc?`<a class="link-btn" href="${p.nc}" target="_blank" rel="noopener">🎥 NeetCode</a>`:''}
+    </div>
+    <div class="section">
+      <div class="row">
+        <select class="ctrl" onchange="patchProblem(${p.n},{status:this.value})">
+          ${['Not Started','In Progress','Solved with Hints','Solved Cleanly','Review Needed'].map(v=>`<option${s.status===v?' selected':''}>${v}</option>`).join('')}
+        </select>
+      </div>
+      <div class="row">
+        ${[['green','🟢'],['yellow','🟡'],['red','🔴']].map(([c,e])=>`<button class="color-btn${s.color===c?' active-'+c:''}" onclick="patchProblem(${p.n},{color:${s.color===c?'null':"'"+c+"'"}})">${e}</button>`).join('')}
+      </div>
+      <div class="row" style="gap:5px">
+        <span style="font-size:11px;color:var(--muted);margin-right:2px">Conf</span>
+        ${[1,2,3,4,5].map(i=>`<button class="conf-btn${i<=s.conf?' active':''}" onclick="patchProblem(${p.n},{conf:${s.conf===i?0:i}})">${i}</button>`).join('')}
+        <input class="time-input" type="number" placeholder="min" value="${s.time||''}" oninput="patchProblem(${p.n},{time:this.value})" style="margin-left:8px">
+        <span style="font-size:11px;color:var(--muted)">min</span>
+      </div>
+      <div class="row" style="gap:12px;flex-wrap:wrap">
+        <label class="cb-row"><input type="checkbox" ${s.timed?'checked':''} onchange="patchProblem(${p.n},{timed:this.checked})"> Timed</label>
+        <label class="cb-row"><input type="checkbox" ${s.explain?'checked':''} onchange="patchProblem(${p.n},{explain:this.checked})"> Can explain</label>
+        <label class="cb-row"><input type="checkbox" ${s.redo?'checked':''} onchange="patchProblem(${p.n},{redo:this.checked})"> Need redo</label>
+      </div>
+      <button class="notes-toggle" onclick="toggleExp('${k}')">${EXP[k]?'▼':'▶'} Problem notes</button>
+      ${EXP[k]?`<textarea class="notes" placeholder="My approach · Why it worked/failed · Key insight · What to remember next time..." oninput="patchProblem(${p.n},{notes:this.value})">${s.notes||''}</textarea>`:''}
+    </div>
+  </div>`;
+}
+
+function renderDesign(topic){
+  const rows=topic.design.map((d,i)=>{
+    const s=DATA.design[i]||{checked:false,status:'Not Started'};
+    return`<div class="design-item${s.checked?' done':''}">
+      <input type="checkbox" ${s.checked?'checked':''} onchange="patchDesign(${i},{checked:this.checked})">
+      <div class="concept-body">
+        <div class="d-name">${d.name}</div>
+        <div class="c-desc">${d.desc}</div>
+      </div>
+      <select class="design-status" onchange="patchDesign(${i},{status:this.value})">
+        ${['Not Started','In Progress','Understood','Needs Review'].map(v=>`<option${s.status===v?' selected':''}>${v}</option>`).join('')}
+      </select>
+    </div>`;
+  }).join('');
+  const k='design-n';
+  return`<div class="card card-blue">
+    <div class="section">
+      <div class="section-label" style="margin-top:14px">🏗️ System Design — Paired Concepts</div>
+      ${rows}
+      <button class="notes-toggle" onclick="toggleExp('${k}')">${EXP[k]?'▼':'▶'} Design notes</button>
+      ${EXP[k]?`<textarea class="notes" placeholder="Definition in my own words · Tradeoffs · Real product example · What's still fuzzy..." oninput="patch({designNotes:this.value})">${DATA.designNotes||''}</textarea>`:''}
+    </div>
+  </div>`;
+}
+
+function computeOverallStats(){
+  // Stats across current topic
+  let solved=0,inprog=0,green=0,yellow=0,red=0;
+  Object.values(DATA.problems).forEach(s=>{
+    if(s.status==='Solved Cleanly')solved++;
+    if(s.status==='In Progress')inprog++;
+    if(s.color==='green')green++;
+    if(s.color==='yellow')yellow++;
+    if(s.color==='red')red++;
+  });
+  const cLearned=Object.values(DATA.concepts).filter(v=>v).length;
+  const cTotal=Object.keys(DATA.concepts).length;
+  return{solved,inprog,green,yellow,red,cLearned,cTotal};
+}
+
+function render(){
+  if(!DATA){document.getElementById('root').innerHTML='<div style="padding:40px;text-align:center;color:var(--muted)">Loading...</div>';return;}
+  const topic=getTopic();
+  const st=computeOverallStats();
+
+  let html=`<div class="header">
+    <div class="title">Interview Prep Tracker</div>
+    <div class="subtitle">NeetCode Roadmap · DSA + System Design</div>
+    <div class="stats-row">
+      <span class="pill pill-purple">${topic.name}</span>
+      <span class="pill pill-green">${st.solved}/${topic.problems.length} solved</span>
+      <span class="pill pill-blue">${st.cLearned}/${st.cTotal} concepts</span>
+      ${st.green?`<span class="pill pill-green">${st.green} 🟢</span>`:''}
+      ${st.yellow?`<span class="pill pill-yellow">${st.yellow} 🟡</span>`:''}
+      ${st.red?`<span class="pill pill-red">${st.red} 🔴</span>`:''}
+    </div>
+  </div>
+
+  <div class="topic-nav">
+    <button class="nav-btn" onclick="goTopic(${CT-1})" ${CT===1?'disabled':''}>←</button>
+    <div class="topic-title">${topic.name}<small>Topic ${CT} of 18 · ${topic.phase}</small></div>
+    <button class="nav-btn" onclick="goTopic(${CT+1})" ${CT===18?'disabled':''}>→</button>
+  </div>
+
+  <div class="dots">
+    ${TOPICS.map(t=>{
+      const pi=PHASES.indexOf(t.phase);
+      const cls=t.id===CT?DOT_CLASSES[pi]:'';
+      return`<button class="dot ${cls}" onclick="goTopic(${t.id})" title="${t.id}. ${t.name}">${t.id}</button>`;
+    }).join('')}
+  </div>
+
+  ${renderTopicHeader(topic)}
+
+  <div class="cards">
+    ${renderConcepts(topic)}
+    <div class="section-label" style="padding:0 4px;margin-top:4px;margin-bottom:-4px">📝 Problems (${topic.problems.length})</div>
+    ${topic.problems.map(renderProblem).join('')}
+    ${renderDesign(topic)}
+  </div>`;
+
+  document.getElementById('root').innerHTML=html;
+}
+
+function toggleExp(k){EXP[k]=!EXP[k];render();}
+function goTopic(t){if(t<1||t>18)return;CT=t;EXP={};loadTopic(t);}
+
+loadTopic(1);
+</script>
+</body>
+</html>
