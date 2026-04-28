@@ -1,125 +1,261 @@
 # Interview Prep Tracker
 
-A single-file, offline-first tracker for working through the **NeetCode 150 roadmap** alongside **system design** fundamentals. Built as one self-contained HTML file — no build step, no server, no dependencies.
+A local, single-file interview preparation tracker for the NeetCode-style roadmap. It helps you track concepts, coding problems, system design notes, review items, streaks, time spent, and overall progress without needing an account, backend, or installation.
 
-![Topics](https://img.shields.io/badge/topics-18-534AB7) ![Problems](https://img.shields.io/badge/problems-141-1D9E75) ![License](https://img.shields.io/badge/license-MIT-888)
+## What Is Included
 
-## What it is
+This folder contains:
 
-18 topic pages that mirror the NeetCode roadmap dependency graph — from Arrays & Hashing at the top down through Math & Geometry. For each topic, you get:
+- `interview_prep_tracker.html`: the complete tracker app.
+- `LICENSE`: the project license.
+- `.gitignore`: Git ignore rules for the project.
 
-- **🗺️ Concepts to Learn** — 5–7 foundational ideas per topic (Big-O, hash maps, monotonic stacks, Dijkstra, etc.) with checkboxes and a notes field
-- **📝 Problems** — 5–11 curated LeetCode problems per topic, each linked to both the LeetCode problem page and the matching NeetCode video walkthrough
-- **🏗️ System Design** — paired real-world design concepts (e.g. Arrays & Hashing pairs with latency/throughput, scaling, caching; Linked List pairs with REST, idempotency, retries, pagination)
+The tracker is built as one HTML file. The styling, roadmap data, and app logic are all inside `interview_prep_tracker.html`.
 
-Per-problem tracking includes status, 🟢/🟡/🔴 self-rating, confidence 1–5, time spent, checkboxes for *Timed / Can explain / Need redo*, and free-form notes.
+## License And Attribution
 
-## Why
+This project is released under the MIT License.
 
-Most LeetCode trackers are spreadsheets. Most roadmaps are static images. This combines the two — you work through the graph in whatever order makes sense, and the tracker remembers everything.
+You may use, copy, modify, and share this tracker, but the copyright notice and license must stay with the project.
 
-The system design pairing is the less-obvious part. Pairing *Heap / Priority Queue* with *message queues and backpressure*, or *Two Pointers* with *load balancers and CDNs*, keeps coding prep and design prep reinforcing each other instead of being two separate grinds.
+Credit:
 
-## Usage
-
-Just open `interview_prep_tracker.html` in a browser. That's it.
-
-State is saved automatically to `window.storage` (or localStorage in a fork — see Customizing below) every 400ms. Progress persists across sessions.
-
-### Navigation
-
-- 18 colored dots at the top — click any topic
-- ← / → arrows to walk through the roadmap in order
-- Dots are color-coded by phase:
-  - **Foundations** (purple) — Arrays & Hashing, Two Pointers, Stack
-  - **Search & Scan** (green) — Binary Search, Sliding Window, Linked List
-  - **Trees** (dark green) — Trees, Tries, Heap / Priority Queue
-  - **Recursion & Graphs** (orange) — Backtracking, Graphs, Advanced Graphs
-  - **DP & Optimization** (red-orange) — 1-D DP, 2-D DP, Intervals, Greedy
-  - **Numerics** (gold) — Bit Manipulation, Math & Geometry
-
-## Topic coverage
-
-| # | Topic | Problems | Phase |
-|---|-------|----------|-------|
-| 1 | Arrays & Hashing | 9 | Foundations |
-| 2 | Two Pointers | 5 | Foundations |
-| 3 | Stack | 7 | Foundations |
-| 4 | Binary Search | 7 | Search & Scan |
-| 5 | Sliding Window | 6 | Search & Scan |
-| 6 | Linked List | 10 | Search & Scan |
-| 7 | Trees | 10 | Trees |
-| 8 | Tries | 5 | Trees |
-| 9 | Heap / Priority Queue | 7 | Trees |
-| 10 | Backtracking | 9 | Recursion & Graphs |
-| 11 | Graphs | 10 | Recursion & Graphs |
-| 12 | Advanced Graphs | 6 | Recursion & Graphs |
-| 13 | 1-D DP | 11 | DP & Optimization |
-| 14 | 2-D DP | 10 | DP & Optimization |
-| 15 | Intervals | 6 | DP & Optimization |
-| 16 | Greedy | 8 | DP & Optimization |
-| 17 | Bit Manipulation | 7 | Numerics |
-| 18 | Math & Geometry | 8 | Numerics |
-
-**Total: 141 problems** across the NeetCode 150 spine.
-
-## Customizing
-
-All content lives in the `TOPICS` array at the top of the `<script>` block. Each topic has the same shape:
-
-```js
-{
-  id: 1,
-  name: 'Arrays & Hashing',
-  phase: 'Foundations',
-  intro: 'Short description shown at the top of the topic page.',
-  concepts: [
-    { name: 'Big-O fundamentals', desc: 'Short description' },
-    // ...
-  ],
-  problems: [
-    { n: 217, name: 'Contains Duplicate', diff: 'E',
-      lc: 'https://leetcode.com/...', nc: 'https://neetcode.io/...' },
-    // ... diff is 'E' | 'M' | 'H'; add prem:1 for LeetCode Premium problems
-  ],
-  design: [
-    { name: 'Latency vs throughput', desc: 'Short description' },
-    // ...
-  ],
-}
+```text
+Interview Prep Tracker by Amir
+Copyright (c) 2026 Amir
 ```
 
-Add a topic, drop a problem, rewrite an intro — changes take effect on refresh.
+## Quick Start
 
-### Using localStorage instead of window.storage
+1. Open the `Interview_Prep_Tracker` folder.
+2. Double-click `interview_prep_tracker.html`.
+3. Your browser should open the tracker.
+4. Start on the `Today` tab or open `Roadmap` to begin with the first topic.
 
-The file uses `window.storage` which is provided by the Claude runtime. If you're hosting it standalone (GitHub Pages, file://, your own site), replace the two storage functions near the top of the script:
+No build step is required. You do not need Node.js, npm, Python, or a database.
 
-```js
-// Replace this:
-async function load(t){try{const r=await window.storage.get(KEY(t));return r?JSON.parse(r.value):null;}catch{return null;}}
-async function save(t,v){try{await window.storage.set(KEY(t),JSON.stringify(v));}catch{}}
+## Optional: Run With A Local Server
 
-// With this:
-async function load(t){try{const r=localStorage.getItem(KEY(t));return r?JSON.parse(r):null;}catch{return null;}}
-async function save(t,v){try{localStorage.setItem(KEY(t),JSON.stringify(v));}catch{}}
+Opening the HTML file directly is usually enough. If you prefer using a local web server, open a terminal in this folder and run one of these:
+
+```powershell
+python -m http.server 8000
 ```
 
-That's the only change needed to run it anywhere.
+Then open:
 
-## Tech notes
+```text
+http://localhost:8000/interview_prep_tracker.html
+```
 
-- Single HTML file, vanilla JS, no build step
-- ~720px max width, mobile-friendly
-- State saves on a 400ms debounce
-- All LeetCode links go direct; NeetCode links point to the per-problem page with the embedded video
-- A handful of problems (Replace Words, Design Search Autocomplete) don't have NeetCode videos — those show only the LeetCode button
+This is optional. The app is designed to work as a local file.
 
-## Credits
+## What The Tracker Covers
 
-- Problem curation follows the [NeetCode 150](https://neetcode.io/practice) roadmap by Navdeep Singh
-- System design concept pairing is original to this tracker
+The built-in roadmap has:
 
-## License
+- 18 roadmap topics
+- 141 coding problems
+- 100 core concepts
+- 72 system design study items
 
-MIT
+The topics are grouped into phases:
+
+- Foundations
+- Search & Scan
+- Trees
+- Recursion & Graphs
+- DP & Optimization
+- Numerics
+
+Each topic includes:
+
+- Concepts to learn
+- LeetCode and NeetCode problem links
+- Difficulty labels: `E`, `M`, `H`
+- Status tracking
+- Confidence tracking
+- Time logging
+- Problem notes
+- Related system design concepts
+
+## Main Tabs
+
+### Today
+
+The `Today` tab is the dashboard. It shows:
+
+- A short greeting based on your progress
+- Your current streak
+- The number of items touched today
+- Total solved problems
+- Problems due for review
+- A 12-week activity heatmap
+- A card to continue your last topic
+
+Use this tab when you want to know what to work on next.
+
+### Roadmap
+
+The `Roadmap` tab is where most study work happens.
+
+At the top, you will see topic dots grouped by phase. Click a topic number to jump to that topic.
+
+Inside each topic, you can:
+
+- Check off concepts as you learn them
+- Open problem cards
+- Visit LeetCode or NeetCode links
+- Set problem status
+- Mark your confidence from 1 to 5
+- Log time spent in minutes
+- Mark whether you solved it timed
+- Mark whether you can explain the solution
+- Mark whether it needs a redo
+- Add notes for the problem, concepts, or design items
+- Track related system design items
+
+Problem statuses are:
+
+- `Not Started`
+- `In Progress`
+- `Solved with Hints`
+- `Solved Cleanly`
+- `Review Needed`
+
+The clean solved count is based on `Solved Cleanly`.
+
+### Stats
+
+The `Stats` tab gives a full progress summary:
+
+- Roadmap solved percentage
+- Attempted percentage
+- Total time logged
+- Concepts completed
+- System design progress
+- Mastery matrix by topic
+- Difficulty distribution
+- Search across your notes
+
+Clicking a topic row in the mastery matrix jumps back to that topic.
+
+## Review Queue
+
+The tracker has a simple spaced-review system.
+
+A problem can appear in the review queue when:
+
+- You mark it as `Review Needed`
+- You mark it red or shaky
+- You check `Need redo`
+- You solved it cleanly and enough time has passed based on confidence
+
+Confidence affects review timing:
+
+- Confidence 1: review after about 1 day
+- Confidence 2: review after about 2 days
+- Confidence 3: review after about 4 days
+- Confidence 4: review after about 14 days
+- Confidence 5: review after about 30 days
+
+Higher confidence means the tracker waits longer before asking you to revisit the problem.
+
+## Data Storage
+
+Your progress is saved in your browser on your own computer.
+
+The app uses browser storage:
+
+- In normal local browser use, it saves to `localStorage`.
+- In supported hosted/artifact environments, it can use `window.storage`.
+
+There is no backend server and no cloud sync.
+
+Important things to know:
+
+- Progress is tied to the browser/profile you use.
+- A different browser may not see the same progress.
+- Clearing browser site data can delete your tracker progress.
+- Moving the HTML file may affect how some browsers treat local storage.
+- Export your data before clearing browser data, switching browsers, or moving machines.
+
+## Export And Import
+
+Use the top-right buttons in the tracker:
+
+- The down-arrow button exports your progress as a JSON file.
+- The up-arrow button imports a previously exported JSON file.
+- The moon/sun button toggles light and dark mode.
+
+Export regularly if the tracker matters to you. The export file contains your saved progress, notes, statuses, activity, and theme setting.
+
+## Recommended Local Workflow
+
+1. Open `interview_prep_tracker.html` in your usual browser.
+2. Start with `Roadmap`.
+3. Work through one topic at a time.
+4. For each problem, set a status and confidence score.
+5. Add short notes about the key idea or mistake.
+6. Check `Can explain` only when you can explain the solution out loud.
+7. Use `Today` at the start of each session to handle review items.
+8. Use `Stats` once in a while to find weak topics.
+9. Export your data regularly.
+
+## Troubleshooting
+
+### The page opens but looks plain
+
+The app uses Google Fonts. If you are offline or the fonts are blocked, the tracker still works, but the typography may look different.
+
+### My progress disappeared
+
+Check that you are using the same browser and browser profile as before. If you recently cleared site data, local progress may have been removed. Import your latest exported JSON file if you have one.
+
+### The import failed
+
+Make sure you selected a JSON file exported by this tracker. If the file was edited manually and the JSON is invalid, the import will fail.
+
+### I want to use it on another computer
+
+Export your progress from the old computer, copy the JSON file to the new computer, open the tracker there, and import the JSON.
+
+### I want a backup
+
+Use export and store the JSON somewhere safe, such as a backup folder or cloud drive.
+
+## Editing The Tracker
+
+If you want to customize the roadmap, edit `interview_prep_tracker.html`.
+
+The main roadmap data lives in the `TOPICS` constant inside the script section. Each topic has:
+
+- `id`
+- `name`
+- `phase`
+- `intro`
+- `concepts`
+- `problems`
+- `design`
+
+After changing the roadmap, refresh the browser. Existing saved progress is merged with the default topic state when the app loads.
+
+If you add or remove topics, also check navigation logic that assumes the current topic range.
+
+## Privacy
+
+The tracker runs locally in your browser. Your notes and progress are not sent to a server by this app.
+
+External links and resources may contact third-party services when used:
+
+- Google Fonts may load fonts from Google.
+- LeetCode links open LeetCode.
+- NeetCode links open NeetCode.
+
+## File To Open
+
+Open this file in your browser:
+
+```text
+Interview_Prep_Tracker/interview_prep_tracker.html
+```

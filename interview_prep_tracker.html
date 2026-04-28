@@ -1,101 +1,309 @@
 <!DOCTYPE html>
-<html>
+<!--
+  Interview Prep Tracker by Amir
+  Copyright (c) 2026 Amir
+  Licensed under the MIT License. See LICENSE for details.
+-->
+<html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Interview Prep Tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--color-background-tertiary,#f5f5f3);color:var(--color-text-primary,#1a1a18);font-size:14px}
-:root{--border:#e0ddd5;--bg:#fff;--bg2:#f5f5f3;--muted:#888;--purple:#534AB7;--purple-bg:#EEEDFE;--purple-light:#AFA9EC;--green:#1D9E75;--green-bg:#E1F5EE;--yellow-c:#BA7517;--yellow-bg:#FAEEDA;--red-c:#A32D2D;--red-bg:#FCEBEB;--blue-c:#185FA5;--blue-bg:#E3EEF7}
-.app{max-width:720px;margin:0 auto;padding:16px}
-.header{margin-bottom:16px}
-.title{font-size:17px;font-weight:500;margin-bottom:4px}
-.subtitle{font-size:12px;color:var(--muted)}
-.stats-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
-.pill{font-size:11px;font-weight:500;padding:3px 10px;border-radius:20px;background:var(--bg2);color:var(--muted)}
-.pill-green{background:var(--green-bg);color:#085041}
-.pill-yellow{background:var(--yellow-bg);color:#633806}
-.pill-red{background:var(--red-bg);color:var(--red-c)}
-.pill-purple{background:var(--purple-bg);color:var(--purple)}
-.pill-blue{background:var(--blue-bg);color:var(--blue-c)}
-.topic-nav{display:flex;align-items:center;gap:10px;margin-bottom:12px}
-.nav-btn{width:32px;height:32px;border-radius:8px;border:0.5px solid var(--border);background:transparent;cursor:pointer;font-size:16px;color:var(--color-text-primary,#1a1a18);display:flex;align-items:center;justify-content:center}
-.nav-btn:disabled{opacity:0.3;cursor:not-allowed}
-.topic-title{flex:1;text-align:center;font-size:14px;font-weight:500}
-.topic-title small{font-size:11px;color:var(--muted);display:block;margin-top:2px;font-weight:400}
-.dots{display:flex;gap:4px;flex-wrap:wrap;justify-content:center;margin-bottom:16px}
-.dot{width:26px;height:26px;border-radius:50%;border:1.5px solid transparent;font-size:10px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;background:var(--bg2);color:var(--muted)}
-.dot-f{background:var(--purple);color:#fff;border-color:var(--purple)}
-.dot-f1{background:#9FE1CB;color:#085041;border-color:var(--green)}
-.dot-f2{background:#97C459;color:#173404;border-color:#3B6D11}
-.dot-f3{background:#EF9F27;color:#412402;border-color:#854F0B}
-.dot-f4{background:#F0997B;color:#4A1B0C;border-color:#993C1D}
-.dot-f5{background:#E8C467;color:#4A3610;border-color:#8B6B14}
-.cards{display:flex;flex-direction:column;gap:12px}
-.card{background:var(--bg);border:0.5px solid var(--border);border-left:3px solid var(--border);border-radius:10px;overflow:hidden}
-.card-green{border-left-color:var(--green)}
-.card-yellow{border-left-color:#EF9F27}
-.card-red{border-left-color:#E24B4A}
-.card-purple{border-left-color:var(--purple)}
-.card-blue{border-left-color:var(--blue-c)}
-.card-head{padding:12px 14px 0;display:flex;align-items:flex-start;gap:8px}
-.prob-n{font-size:11px;font-weight:600;color:var(--muted);min-width:42px;padding-top:1px}
-.problem-name{font-size:13px;font-weight:500;flex:1;line-height:1.3}
-.diff-badge{font-size:10px;font-weight:500;padding:2px 7px;border-radius:4px}
-.diff-E{background:#EAF3DE;color:#27500A}
-.diff-M{background:#FAEEDA;color:#633806}
-.diff-H{background:#FCEBEB;color:#791F1F}
-.card-links{padding:6px 14px 8px;display:flex;gap:6px;flex-wrap:wrap}
-.link-btn{font-size:11px;padding:3px 10px;border-radius:4px;border:0.5px solid var(--border);color:var(--muted);text-decoration:none;background:var(--bg2)}
-.link-btn:hover{color:var(--color-text-primary,#1a1a18);background:var(--bg)}
-.prem-badge{font-size:10px;padding:1px 5px;border-radius:3px;background:#FAEEDA;color:#633806;margin-left:4px}
-.section{padding:0 14px 12px}
-.section-label{font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;margin-top:10px}
-.divider{height:0.5px;background:var(--border);margin:0 14px}
-.row{display:flex;gap:6px;align-items:center;margin-bottom:6px;flex-wrap:wrap}
-select.ctrl{font-size:12px;padding:4px 8px;border-radius:6px;border:0.5px solid var(--border);background:var(--bg2);color:var(--color-text-primary,#1a1a18);cursor:pointer;flex:1}
-.color-btn{flex:1;font-size:12px;padding:4px 0;border-radius:6px;border:1px solid var(--border);background:transparent;cursor:pointer;transition:all .1s}
-.color-btn.active-green{background:var(--green-bg);border-color:var(--green)}
-.color-btn.active-yellow{background:var(--yellow-bg);border-color:#EF9F27}
-.color-btn.active-red{background:var(--red-bg);border-color:#E24B4A}
-.conf-btn{width:22px;height:22px;border-radius:50%;border:0.5px solid var(--border);background:var(--bg2);color:var(--muted);font-size:10px;cursor:pointer;font-weight:500;display:flex;align-items:center;justify-content:center;padding:0}
-.conf-btn.active{background:var(--purple);color:#fff;border-color:var(--purple)}
-.cb-row{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--muted);cursor:pointer}
-.cb-row input{accent-color:var(--purple);cursor:pointer}
-.time-input{width:52px;font-size:12px;padding:3px 6px;border-radius:6px;border:0.5px solid var(--border);background:var(--bg2);color:var(--color-text-primary,#1a1a18)}
-.notes-toggle{font-size:11px;color:var(--muted);background:none;border:none;cursor:pointer;padding:0;display:flex;align-items:center;gap:4px;margin-bottom:4px;margin-top:4px}
-.notes-toggle:hover{color:var(--color-text-primary,#1a1a18)}
-textarea.notes{width:100%;font-size:12px;padding:8px;border-radius:6px;border:0.5px solid var(--border);background:var(--bg2);color:var(--color-text-primary,#1a1a18);resize:vertical;min-height:90px;font-family:inherit;line-height:1.5;margin-top:4px}
-.concept-row{display:flex;align-items:flex-start;gap:8px;padding:6px 0;font-size:12px;border-bottom:0.5px dashed var(--border)}
+/* ─── reset / root ────────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent}
+body{font-family:'IBM Plex Sans',-apple-system,BlinkMacSystemFont,sans-serif;font-size:14px;line-height:1.45;color:var(--ink);background:var(--bg);transition:background .25s ease,color .25s ease;overflow-x:hidden}
+:root{
+  --bg:#FAF8F2;--surface:#FFFFFF;--surface-2:#F4F1E8;--surface-3:#EDE9DC;
+  --ink:#1C1B1A;--ink-2:#3A3833;--muted:#7A766D;--muted-2:#9C988E;
+  --border:#E5E0D2;--border-strong:#D5CFBE;
+  --accent:#534AB7;--accent-bg:#EEEDFE;--accent-soft:#C9C5F2;
+  --green:#1D9E75;--green-bg:#E1F5EE;--green-soft:#9FE1CB;--green-deep:#0F6E50;
+  --amber:#BA7517;--amber-bg:#FAEEDA;--amber-soft:#EFC58A;
+  --red:#A32D2D;--red-bg:#FCEBEB;--red-soft:#E8A4A4;
+  --blue:#185FA5;--blue-bg:#E3EEF7;--blue-soft:#9DC1E0;
+  --shadow-sm:0 1px 2px rgba(28,27,26,.04),0 1px 1px rgba(28,27,26,.03);
+  --shadow:0 2px 8px rgba(28,27,26,.04),0 1px 2px rgba(28,27,26,.03);
+  --shadow-lg:0 8px 28px rgba(28,27,26,.08),0 2px 6px rgba(28,27,26,.04);
+  --radius-sm:6px;--radius:10px;--radius-lg:14px;
+  --heat-0:#F0ECE0;--heat-1:#D6EAD8;--heat-2:#9ED3B4;--heat-3:#4DAE85;--heat-4:#1D8A60;
+}
+[data-theme="dark"]{
+  --bg:#141416;--surface:#1C1C1F;--surface-2:#252528;--surface-3:#2E2E32;
+  --ink:#EFEDE6;--ink-2:#C9C6BD;--muted:#8F8C84;--muted-2:#6E6B64;
+  --border:#2D2D32;--border-strong:#3D3D43;
+  --accent:#9D96E8;--accent-bg:#272346;--accent-soft:#534AB7;
+  --green:#4FD1A6;--green-bg:#143028;--green-soft:#1D9E75;--green-deep:#7FE0BC;
+  --amber:#E8B068;--amber-bg:#2E2616;--amber-soft:#BA7517;
+  --red:#E88A8A;--red-bg:#2E1818;--red-soft:#A32D2D;
+  --blue:#7FB5DD;--blue-bg:#152434;--blue-soft:#185FA5;
+  --shadow-sm:0 1px 2px rgba(0,0,0,.3);
+  --shadow:0 2px 8px rgba(0,0,0,.35);
+  --shadow-lg:0 8px 28px rgba(0,0,0,.5);
+  --heat-0:#1F1F22;--heat-1:#1F3027;--heat-2:#225B41;--heat-3:#2E9670;--heat-4:#5FCFA0;
+}
+::selection{background:var(--accent-bg);color:var(--accent)}
+/* ─── layout ──────────────────────────────────────────────── */
+.app{max-width:780px;margin:0 auto;padding:18px 16px 80px}
+.topbar{display:flex;align-items:center;gap:10px;margin-bottom:18px}
+.brand{flex:1;min-width:0}
+.brand-title{font-family:'Instrument Serif',serif;font-size:26px;font-weight:400;letter-spacing:-0.01em;line-height:1;color:var(--ink)}
+.brand-title em{font-style:italic;color:var(--accent)}
+.brand-sub{font-size:11px;color:var(--muted);letter-spacing:0.04em;text-transform:uppercase;margin-top:4px;font-weight:500}
+.icon-btn{width:34px;height:34px;border-radius:9px;border:0.5px solid var(--border);background:var(--surface);color:var(--ink-2);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s ease;flex-shrink:0;font-size:14px}
+.icon-btn:hover{background:var(--surface-2);border-color:var(--border-strong)}
+.icon-btn:active{transform:scale(0.96)}
+.icon-btn svg{width:16px;height:16px}
+/* ─── tabs ────────────────────────────────────────────────── */
+.tabs{display:flex;gap:2px;background:var(--surface-2);padding:3px;border-radius:10px;margin-bottom:18px;border:0.5px solid var(--border)}
+.tab{flex:1;font-family:inherit;font-size:13px;font-weight:500;padding:8px 4px;border:none;background:transparent;color:var(--muted);cursor:pointer;border-radius:7px;transition:all .15s ease;letter-spacing:0.01em}
+.tab:hover{color:var(--ink-2)}
+.tab.active{background:var(--surface);color:var(--ink);box-shadow:var(--shadow-sm)}
+/* ─── pills / badges ──────────────────────────────────────── */
+.pill{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:500;padding:3px 9px;border-radius:20px;background:var(--surface-2);color:var(--muted);letter-spacing:0.01em;white-space:nowrap}
+.pill-green{background:var(--green-bg);color:var(--green-deep)}
+.pill-amber{background:var(--amber-bg);color:#5F3B0A}
+.pill-red{background:var(--red-bg);color:#791F1F}
+.pill-accent{background:var(--accent-bg);color:var(--accent)}
+.pill-blue{background:var(--blue-bg);color:var(--blue)}
+[data-theme="dark"] .pill-amber{color:var(--amber)}
+[data-theme="dark"] .pill-red{color:var(--red)}
+[data-theme="dark"] .pill-green{color:var(--green-deep)}
+/* ─── card ────────────────────────────────────────────────── */
+.card{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-sm)}
+.card+.card{margin-top:12px}
+.card-pad{padding:16px}
+.card-title{font-family:'Instrument Serif',serif;font-size:19px;font-weight:400;letter-spacing:-0.005em;color:var(--ink)}
+.card-title em{font-style:italic;color:var(--accent)}
+.card-sub{font-size:11px;color:var(--muted);letter-spacing:0.04em;text-transform:uppercase;font-weight:500;margin-bottom:10px}
+.section-label{font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;margin:0 0 10px}
+/* ─── hero / today view ───────────────────────────────────── */
+.hero{padding:20px 18px;background:linear-gradient(180deg,var(--surface) 0%,var(--surface-2) 140%);border:0.5px solid var(--border);border-radius:var(--radius-lg);margin-bottom:14px;position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;top:-30px;right:-30px;width:140px;height:140px;background:radial-gradient(circle at center,var(--accent-bg) 0%,transparent 70%);pointer-events:none;opacity:0.6}
+.hero-greeting{font-family:'Instrument Serif',serif;font-size:32px;font-weight:400;letter-spacing:-0.02em;line-height:1.05;color:var(--ink);margin-bottom:10px;position:relative}
+.hero-greeting em{font-style:italic;color:var(--accent)}
+.hero-line{font-size:13px;color:var(--muted);line-height:1.5;position:relative;max-width:520px}
+.hero-line strong{color:var(--ink-2);font-weight:500}
+.hero-stats{display:flex;gap:6px;flex-wrap:wrap;margin-top:14px;position:relative}
+/* ─── heatmap ─────────────────────────────────────────────── */
+.heatmap-card{padding:14px 16px 16px}
+.heatmap-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px;gap:10px}
+.heatmap-head h3{font-family:'Instrument Serif',serif;font-size:17px;font-weight:400;letter-spacing:-0.005em;color:var(--ink)}
+.heatmap-meta{font-size:11px;color:var(--muted)}
+.heatmap-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:4px}
+.heatmap-wrap::-webkit-scrollbar{height:4px}
+.heatmap-wrap::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:2px}
+.heatmap{display:grid;grid-template-rows:auto repeat(7,11px);grid-auto-flow:column;grid-auto-columns:11px;gap:2px;font-family:'IBM Plex Mono',monospace;min-width:max-content}
+.hm-month{font-size:9px;color:var(--muted);font-weight:500;letter-spacing:0.05em;text-transform:uppercase;grid-row:1;height:14px;align-self:center;white-space:nowrap}
+.hm-cell{width:11px;height:11px;border-radius:2px;background:var(--heat-0);transition:transform .15s ease;cursor:default}
+.hm-cell.l1{background:var(--heat-1)}
+.hm-cell.l2{background:var(--heat-2)}
+.hm-cell.l3{background:var(--heat-3)}
+.hm-cell.l4{background:var(--heat-4)}
+.hm-cell.today{box-shadow:0 0 0 1.5px var(--accent)}
+.hm-cell:hover{transform:scale(1.4);z-index:2;position:relative}
+.hm-legend{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--muted);margin-top:10px;letter-spacing:0.02em}
+.hm-legend-cell{width:10px;height:10px;border-radius:2px}
+/* ─── stat row ────────────────────────────────────────────── */
+.stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+.stat-tile{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:14px 14px 12px;box-shadow:var(--shadow-sm)}
+.stat-num{font-family:'Instrument Serif',serif;font-size:28px;font-weight:400;line-height:1;color:var(--ink);letter-spacing:-0.02em}
+.stat-num em{font-style:italic;color:var(--accent)}
+.stat-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;font-weight:500;margin-top:6px}
+.stat-trend{font-size:11px;color:var(--muted);margin-top:4px;font-family:'IBM Plex Mono',monospace}
+.stat-trend.up{color:var(--green)}
+/* ─── review queue ────────────────────────────────────────── */
+.queue-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:0.5px dashed var(--border);cursor:pointer;transition:padding .15s ease}
+.queue-row:last-child{border-bottom:0}
+.queue-row:hover{padding-left:4px}
+.queue-num{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);min-width:40px;font-weight:500}
+.queue-name{flex:1;font-size:13px;color:var(--ink);font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.queue-topic{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.04em;margin-top:1px}
+.queue-meta{display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0}
+.queue-due{font-size:10px;color:var(--amber);font-weight:600;text-transform:uppercase;letter-spacing:0.04em;font-family:'IBM Plex Mono',monospace}
+.queue-due.overdue{color:var(--red)}
+.queue-empty{padding:24px 12px;text-align:center;color:var(--muted);font-size:13px;font-style:italic;font-family:'Instrument Serif',serif;font-size:16px}
+/* ─── topic nav (phase-grouped) ───────────────────────────── */
+.phase-nav{margin-bottom:14px}
+.phase-group{margin-bottom:8px}
+.phase-group-label{font-size:9px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:5px;display:flex;align-items:center;gap:6px}
+.phase-group-label::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--phase-color,var(--muted))}
+.phase-dots{display:flex;gap:5px;flex-wrap:wrap}
+.tdot{width:30px;height:30px;border-radius:8px;border:0.5px solid var(--border);background:var(--surface);font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s ease;position:relative;padding:0}
+.tdot:hover{border-color:var(--border-strong);color:var(--ink-2)}
+.tdot.done{background:var(--phase-color);color:#fff;border-color:var(--phase-color);opacity:0.55}
+.tdot.partial{border-color:var(--phase-color);color:var(--phase-color)}
+.tdot.partial::after{content:"";position:absolute;bottom:-1.5px;left:50%;transform:translateX(-50%);width:14px;height:2px;background:var(--phase-color);border-radius:1px;opacity:var(--frac,0.5)}
+.tdot.current{background:var(--ink);color:var(--bg);border-color:var(--ink);box-shadow:0 0 0 2px var(--bg),0 0 0 3px var(--ink)}
+[data-theme="dark"] .tdot.current{box-shadow:0 0 0 2px var(--bg),0 0 0 3px var(--ink)}
+/* ─── topic header ────────────────────────────────────────── */
+.topic-header{padding:18px}
+.topic-header-top{display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap}
+.topic-name{font-family:'Instrument Serif',serif;font-size:28px;font-weight:400;letter-spacing:-0.015em;line-height:1.05;color:var(--ink);margin-bottom:6px}
+.topic-name em{font-style:italic;color:var(--accent)}
+.topic-intro{font-size:13px;color:var(--muted);line-height:1.55;max-width:600px}
+.topic-meta-row{display:flex;align-items:center;gap:14px;margin-top:14px;flex-wrap:wrap}
+.topic-progress{flex:1;min-width:180px;display:flex;align-items:center;gap:10px}
+.progress-track{flex:1;height:4px;background:var(--surface-2);border-radius:2px;overflow:hidden;position:relative}
+.progress-fill{position:absolute;top:0;left:0;height:100%;background:var(--phase-color,var(--accent));border-radius:2px;transition:width .4s ease}
+.progress-text{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);font-weight:500;white-space:nowrap}
+.topic-arrows{display:flex;gap:5px}
+/* ─── concepts ────────────────────────────────────────────── */
+.concept-list{display:flex;flex-direction:column}
+.concept-row{display:flex;align-items:flex-start;gap:10px;padding:9px 0;font-size:13px;border-bottom:0.5px dashed var(--border);transition:opacity .2s ease}
 .concept-row:last-child{border-bottom:0}
-.concept-row input[type="checkbox"]{accent-color:var(--purple);cursor:pointer;margin-top:2px;flex-shrink:0}
-.concept-row .c-name{font-weight:500;color:var(--color-text-primary,#1a1a18);line-height:1.4}
-.concept-row .c-desc{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.4}
-.concept-row.done .c-name{color:var(--muted);text-decoration:line-through}
-.concept-body{flex:1}
-.phase-badge{display:inline-block;font-size:10px;font-weight:500;padding:2px 8px;border-radius:10px;margin-left:6px}
-.topic-header-card{background:var(--bg);border:0.5px solid var(--border);border-radius:10px;padding:14px;margin-bottom:12px}
-.topic-intro{font-size:12px;color:var(--muted);line-height:1.5;margin-top:6px}
-.progress-bar{height:4px;background:var(--bg2);border-radius:2px;overflow:hidden;margin-top:10px}
-.progress-fill{height:100%;background:var(--purple);border-radius:2px;transition:width .3s}
-.design-item{display:flex;align-items:flex-start;gap:8px;padding:8px 0;font-size:12px;border-bottom:0.5px dashed var(--border)}
-.design-item:last-child{border-bottom:0}
-.design-item input[type="checkbox"]{accent-color:var(--purple);cursor:pointer;margin-top:2px;flex-shrink:0}
-.design-item .d-name{font-weight:500;color:var(--color-text-primary,#1a1a18)}
-.design-item.done .d-name{color:var(--muted);text-decoration:line-through}
-.design-status{font-size:11px;padding:2px 6px;border-radius:4px;border:0.5px solid var(--border);background:var(--bg2);color:var(--muted);margin-left:auto}
+.concept-row input[type="checkbox"]{accent-color:var(--accent);cursor:pointer;margin-top:2px;flex-shrink:0;width:14px;height:14px}
+.c-name{font-weight:500;color:var(--ink);line-height:1.35}
+.c-desc{font-size:11.5px;color:var(--muted);margin-top:2px;line-height:1.4}
+.concept-row.done .c-name{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--muted-2);text-decoration-thickness:1px}
+.concept-row.done .c-desc{opacity:0.6}
+.concept-body{flex:1;min-width:0}
+/* ─── filter bar ──────────────────────────────────────────── */
+.filter-bar{display:flex;gap:4px;margin-bottom:10px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding:1px;scrollbar-width:none}
+.filter-bar::-webkit-scrollbar{display:none}
+.fchip{font-family:inherit;font-size:11.5px;font-weight:500;padding:5px 11px;border-radius:14px;border:0.5px solid var(--border);background:var(--surface);color:var(--muted);cursor:pointer;white-space:nowrap;transition:all .15s ease;display:flex;align-items:center;gap:4px}
+.fchip:hover{border-color:var(--border-strong);color:var(--ink-2)}
+.fchip.active{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.fchip-count{font-family:'IBM Plex Mono',monospace;font-size:10px;opacity:0.7;font-weight:500}
+/* ─── problem cards (collapsed by default) ────────────────── */
+.problems-section{margin-top:6px}
+.problems-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:8px;padding:0 2px}
+.problems-head h3{font-family:'Instrument Serif',serif;font-size:18px;font-weight:400;letter-spacing:-0.005em;color:var(--ink)}
+.problems-head .pmeta{font-size:11px;color:var(--muted);font-family:'IBM Plex Mono',monospace}
+.pcard{background:var(--surface);border:0.5px solid var(--border);border-left:2.5px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:all .2s ease}
+.pcard+.pcard{margin-top:6px}
+.pcard.col-green{border-left-color:var(--green)}
+.pcard.col-yellow{border-left-color:var(--amber)}
+.pcard.col-red{border-left-color:var(--red)}
+.pcard.due{box-shadow:0 0 0 1px var(--amber-soft)}
+.pcard-row{display:flex;align-items:center;gap:10px;padding:11px 14px;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent}
+.pcard-row:hover{background:var(--surface-2)}
+.p-num{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500;color:var(--muted);min-width:38px}
+.p-name{flex:1;font-size:13px;font-weight:500;color:var(--ink);line-height:1.3;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.p-name.solved{color:var(--muted)}
+.p-tags{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.diff-badge{font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:500;padding:1.5px 6px;border-radius:3px;letter-spacing:0.02em}
+.diff-E{background:#EAF3DE;color:#27500A}
+.diff-M{background:var(--amber-bg);color:#5F3B0A}
+.diff-H{background:var(--red-bg);color:#791F1F}
+[data-theme="dark"] .diff-E{background:#1B2A11;color:#9DD37C}
+[data-theme="dark"] .diff-M{color:var(--amber)}
+[data-theme="dark"] .diff-H{color:var(--red)}
+.status-dot{width:9px;height:9px;border-radius:50%;background:var(--surface-3);border:1px solid var(--border-strong)}
+.status-dot.s-prog{background:var(--amber);border-color:var(--amber)}
+.status-dot.s-hint{background:var(--blue);border-color:var(--blue)}
+.status-dot.s-clean{background:var(--green);border-color:var(--green)}
+.status-dot.s-rev{background:var(--red);border-color:var(--red)}
+.due-flag{font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:var(--amber);font-weight:600;letter-spacing:0.04em;text-transform:uppercase}
+.expand-i{width:14px;height:14px;color:var(--muted);transition:transform .2s ease;flex-shrink:0}
+.pcard.open .expand-i{transform:rotate(90deg)}
+.pcard-body{display:none;padding:2px 14px 14px;border-top:0.5px solid var(--border)}
+.pcard.open .pcard-body{display:block;animation:slideDown .25s ease}
+@keyframes slideDown{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+.pb-links{display:flex;gap:6px;flex-wrap:wrap;padding:10px 0 8px}
+.link-btn{font-family:inherit;font-size:11.5px;font-weight:500;padding:4px 10px;border-radius:5px;border:0.5px solid var(--border);color:var(--ink-2);text-decoration:none;background:var(--surface-2);transition:all .15s ease;display:inline-flex;align-items:center;gap:4px}
+.link-btn:hover{background:var(--surface);border-color:var(--border-strong);color:var(--ink)}
+.prem-pill{font-family:'IBM Plex Mono',monospace;font-size:9px;padding:1px 4px;border-radius:3px;background:var(--amber-bg);color:#5F3B0A;margin-left:6px;font-weight:600;letter-spacing:0.04em}
+[data-theme="dark"] .prem-pill{color:var(--amber)}
+.pb-row{display:flex;gap:6px;align-items:center;margin-bottom:8px;flex-wrap:wrap}
+.pb-row label{font-size:11px;color:var(--muted);min-width:42px;font-weight:500}
+.ctrl{font-family:inherit;font-size:12px;padding:5px 9px;border-radius:6px;border:0.5px solid var(--border);background:var(--surface-2);color:var(--ink);cursor:pointer;flex:1;min-width:0}
+.ctrl:focus{outline:none;border-color:var(--accent);background:var(--surface)}
+.color-grp{display:flex;gap:5px;flex:1}
+.color-btn{flex:1;font-family:inherit;font-size:12px;padding:6px 0;border-radius:6px;border:0.5px solid var(--border);background:var(--surface-2);cursor:pointer;transition:all .12s ease;color:var(--ink-2)}
+.color-btn:hover{border-color:var(--border-strong)}
+.color-btn.act-green{background:var(--green-bg);border-color:var(--green);color:var(--green-deep)}
+.color-btn.act-yellow{background:var(--amber-bg);border-color:var(--amber);color:#5F3B0A}
+.color-btn.act-red{background:var(--red-bg);border-color:var(--red);color:#791F1F}
+[data-theme="dark"] .color-btn.act-yellow{color:var(--amber)}
+[data-theme="dark"] .color-btn.act-red{color:var(--red)}
+.conf-grp{display:flex;gap:4px;align-items:center}
+.conf-btn{width:28px;height:28px;border-radius:50%;border:0.5px solid var(--border);background:var(--surface-2);color:var(--muted);font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;transition:all .12s ease}
+.conf-btn:hover{border-color:var(--accent-soft)}
+.conf-btn.act{background:var(--accent);color:#fff;border-color:var(--accent)}
+.time-input{width:60px;font-family:'IBM Plex Mono',monospace;font-size:12px;padding:5px 8px;border-radius:6px;border:0.5px solid var(--border);background:var(--surface-2);color:var(--ink)}
+.time-input:focus{outline:none;border-color:var(--accent);background:var(--surface)}
+.cb-grp{display:flex;gap:14px;flex-wrap:wrap;margin:8px 0}
+.cb-row{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-2);cursor:pointer;font-weight:500}
+.cb-row input{accent-color:var(--accent);cursor:pointer;width:14px;height:14px}
+.notes-toggle{font-family:inherit;font-size:11.5px;color:var(--muted);background:none;border:none;cursor:pointer;padding:4px 0;display:flex;align-items:center;gap:5px;font-weight:500}
+.notes-toggle:hover{color:var(--ink-2)}
+textarea.notes{width:100%;font-family:inherit;font-size:12.5px;padding:9px 10px;border-radius:7px;border:0.5px solid var(--border);background:var(--surface-2);color:var(--ink);resize:vertical;min-height:96px;line-height:1.5;margin-top:6px}
+textarea.notes:focus{outline:none;border-color:var(--accent);background:var(--surface)}
+/* ─── system design card ──────────────────────────────────── */
+.dcard{padding:16px}
+.dcard h3{font-family:'Instrument Serif',serif;font-size:18px;font-weight:400;letter-spacing:-0.005em;color:var(--ink);margin-bottom:2px}
+.dcard h3 em{font-style:italic;color:var(--blue)}
+.dcard-sub{font-size:11px;color:var(--muted);margin-bottom:12px}
+.d-row{display:flex;align-items:flex-start;gap:10px;padding:9px 0;font-size:13px;border-bottom:0.5px dashed var(--border)}
+.d-row:last-of-type{border-bottom:0}
+.d-row input[type="checkbox"]{accent-color:var(--blue);cursor:pointer;margin-top:2px;flex-shrink:0;width:14px;height:14px}
+.d-row.done .d-name{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--muted-2);text-decoration-thickness:1px}
+.d-name{font-weight:500;color:var(--ink);line-height:1.35}
+.d-desc{font-size:11.5px;color:var(--muted);margin-top:2px;line-height:1.4}
+.d-status{font-family:inherit;font-size:11px;padding:3px 7px;border-radius:5px;border:0.5px solid var(--border);background:var(--surface-2);color:var(--ink-2);margin-left:auto;flex-shrink:0;cursor:pointer}
+/* ─── stats view ──────────────────────────────────────────── */
+.matrix{display:grid;grid-template-columns:1fr 60px 60px 60px;gap:0;font-family:inherit}
+.mx-h{font-size:9.5px;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;font-weight:600;padding:0 4px 8px;text-align:center}
+.mx-h:first-child{text-align:left}
+.mx-row{display:contents}
+.mx-row>*{padding:9px 4px;border-top:0.5px dashed var(--border);font-size:12px;display:flex;align-items:center}
+.mx-name{justify-content:flex-start;color:var(--ink);font-weight:500;gap:8px}
+.mx-name .ph-tag{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.mx-cell{justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);position:relative;flex-direction:column;gap:3px;align-items:center;padding:6px 4px}
+.mx-bar{width:42px;height:4px;background:var(--surface-2);border-radius:2px;overflow:hidden}
+.mx-bar-fill{height:100%;background:var(--phase-color,var(--accent));border-radius:2px;transition:width .4s ease}
+.mx-cell.full{color:var(--green-deep);font-weight:600}
+[data-theme="dark"] .mx-cell.full{color:var(--green)}
+.dist-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.dist-tile{padding:12px 14px;background:var(--surface-2);border-radius:var(--radius-sm);text-align:center}
+.dist-num{font-family:'Instrument Serif',serif;font-size:24px;color:var(--ink);line-height:1}
+.dist-num em{font-style:italic;color:var(--accent)}
+.dist-lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;margin-top:5px;font-weight:500}
+.search-input{width:100%;font-family:inherit;font-size:13px;padding:9px 12px;border-radius:8px;border:0.5px solid var(--border);background:var(--surface-2);color:var(--ink);margin-bottom:10px}
+.search-input:focus{outline:none;border-color:var(--accent);background:var(--surface)}
+.note-result{padding:10px 12px;border:0.5px solid var(--border);border-radius:7px;margin-bottom:6px;background:var(--surface-2);cursor:pointer;transition:all .15s ease}
+.note-result:hover{border-color:var(--accent-soft);background:var(--surface)}
+.nr-head{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:4px;font-weight:500}
+.nr-text{font-size:12px;color:var(--ink-2);line-height:1.5;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.nr-text mark{background:var(--accent-bg);color:var(--accent);padding:0 2px;border-radius:2px;font-weight:500}
+/* ─── empty / loading ─────────────────────────────────────── */
+.empty{padding:40px 20px;text-align:center;color:var(--muted);font-family:'Instrument Serif',serif;font-size:18px;font-style:italic}
+.empty-sub{font-family:'IBM Plex Sans',sans-serif;font-style:normal;font-size:12px;color:var(--muted-2);margin-top:8px}
+/* ─── milestone toast ─────────────────────────────────────── */
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(40px);background:var(--ink);color:var(--bg);padding:12px 20px;border-radius:10px;font-size:13px;font-weight:500;box-shadow:var(--shadow-lg);opacity:0;transition:all .3s ease;pointer-events:none;z-index:100;max-width:90vw;display:flex;align-items:center;gap:8px}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast em{font-family:'Instrument Serif',serif;font-style:italic;color:var(--accent)}
+[data-theme="dark"] .toast em{color:var(--accent)}
+/* ─── responsive ──────────────────────────────────────────── */
+@media (max-width:520px){
+  .app{padding:14px 12px 60px}
+  .brand-title{font-size:22px}
+  .hero-greeting{font-size:24px}
+  .topic-name{font-size:24px}
+  .stat-row{grid-template-columns:1fr 1fr}
+  .matrix{grid-template-columns:1fr 48px 48px 48px}
+  .mx-bar{width:32px}
+  .dist-grid{grid-template-columns:1fr 1fr 1fr}
+  .pb-row{gap:5px}
+  .conf-btn{width:26px;height:26px}
+}
 </style>
 </head>
 <body>
 <div class="app" id="root"></div>
+<div class="toast" id="toast"></div>
 
 <script>
-// =============================================================
-// TOPIC DATA - follows the NeetCode roadmap dependency graph
-// =============================================================
+// ════════════════════════════════════════════════════════════════
+// TOPICS DATA — preserves the NeetCode roadmap, unchanged shape
+// ════════════════════════════════════════════════════════════════
 const TOPICS=[
-  {
-    id:1,name:'Arrays & Hashing',phase:'Foundations',
+  {id:1,name:'Arrays & Hashing',phase:'Foundations',
     intro:'The foundation. Almost every interview question touches these tools — arrays, dicts, sets, sorting, prefix sums.',
     concepts:[
       {name:'Big-O fundamentals',desc:'Time & space for array ops, dict ops, sort'},
@@ -104,8 +312,7 @@ const TOPICS=[
       {name:'Frequency counting pattern',desc:'Counter / defaultdict(int)'},
       {name:'Prefix sum',desc:'Precompute cumulative sums for O(1) range queries'},
       {name:'Sorting as preprocessing',desc:'O(n log n) to expose structure'},
-      {name:'Two-pass vs one-pass',desc:'Trade memory vs clarity'},
-    ],
+      {name:'Two-pass vs one-pass',desc:'Trade memory vs clarity'}],
     problems:[
       {n:217,name:'Contains Duplicate',diff:'E',lc:'https://leetcode.com/problems/contains-duplicate/',nc:'https://neetcode.io/problems/duplicate-integer'},
       {n:242,name:'Valid Anagram',diff:'E',lc:'https://leetcode.com/problems/valid-anagram/',nc:'https://neetcode.io/problems/is-anagram'},
@@ -115,49 +322,39 @@ const TOPICS=[
       {n:271,name:'Encode and Decode Strings',diff:'M',prem:1,lc:'https://leetcode.com/problems/encode-and-decode-strings/',nc:'https://neetcode.io/problems/string-encode-and-decode'},
       {n:238,name:'Product of Array Except Self',diff:'M',lc:'https://leetcode.com/problems/product-of-array-except-self/',nc:'https://neetcode.io/problems/products-of-array-discluding-self'},
       {n:36,name:'Valid Sudoku',diff:'M',lc:'https://leetcode.com/problems/valid-sudoku/',nc:'https://neetcode.io/problems/valid-sudoku'},
-      {n:128,name:'Longest Consecutive Sequence',diff:'M',lc:'https://leetcode.com/problems/longest-consecutive-sequence/',nc:'https://neetcode.io/problems/longest-consecutive-sequence'},
-    ],
+      {n:128,name:'Longest Consecutive Sequence',diff:'M',lc:'https://leetcode.com/problems/longest-consecutive-sequence/',nc:'https://neetcode.io/problems/longest-consecutive-sequence'}],
     design:[
       {name:'Latency vs throughput',desc:'The two primary performance dimensions'},
       {name:'Vertical vs horizontal scaling',desc:'Bigger box vs more boxes'},
       {name:'Stateless vs stateful services',desc:'Why statelessness scales'},
-      {name:'Caching basics & cache hit rate',desc:'Why caches exist; measuring effectiveness'},
-    ],
-  },
-  {
-    id:2,name:'Two Pointers',phase:'Foundations',
+      {name:'Caching basics & cache hit rate',desc:'Why caches exist; measuring effectiveness'}]},
+  {id:2,name:'Two Pointers',phase:'Foundations',
     intro:'One of the highest-leverage patterns. Turns brute-force O(n²) scans into clean linear passes when data is sorted or has symmetry.',
     concepts:[
       {name:'Opposite-direction pointers',desc:'Converge from both ends (sorted arrays, palindromes)'},
       {name:'Same-direction pointers',desc:'Slow/fast scan, in-place filtering'},
       {name:'Slow/fast pointer pattern',desc:'Detect cycles, find midpoint'},
       {name:'Sorted-array invariant',desc:'Why sorting unlocks two-pointer'},
-      {name:'In-place modification',desc:'O(1) extra space moves'},
-    ],
+      {name:'In-place modification',desc:'O(1) extra space moves'}],
     problems:[
       {n:125,name:'Valid Palindrome',diff:'E',lc:'https://leetcode.com/problems/valid-palindrome/',nc:'https://neetcode.io/problems/is-palindrome'},
       {n:167,name:'Two Sum II — Input Array Is Sorted',diff:'M',lc:'https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/',nc:'https://neetcode.io/problems/two-integer-sum-ii'},
       {n:15,name:'3Sum',diff:'M',lc:'https://leetcode.com/problems/3sum/',nc:'https://neetcode.io/problems/three-integer-sum'},
       {n:11,name:'Container With Most Water',diff:'M',lc:'https://leetcode.com/problems/container-with-most-water/',nc:'https://neetcode.io/problems/max-water-container'},
-      {n:42,name:'Trapping Rain Water',diff:'H',lc:'https://leetcode.com/problems/trapping-rain-water/',nc:'https://neetcode.io/problems/trapping-rain-water'},
-    ],
+      {n:42,name:'Trapping Rain Water',diff:'H',lc:'https://leetcode.com/problems/trapping-rain-water/',nc:'https://neetcode.io/problems/trapping-rain-water'}],
     design:[
       {name:'Load balancer basics',desc:'L4 vs L7, round-robin, least-connections'},
       {name:'Reverse proxy vs load balancer',desc:'Overlap and distinctions'},
       {name:'Health checks & failover',desc:'Detecting bad instances'},
-      {name:'CDN basics',desc:'Edge caching and geographic locality'},
-    ],
-  },
-  {
-    id:3,name:'Stack',phase:'Foundations',
+      {name:'CDN basics',desc:'Edge caching and geographic locality'}]},
+  {id:3,name:'Stack',phase:'Foundations',
     intro:'LIFO as a mental model. The monotonic-stack trick appears in surprising places.',
     concepts:[
       {name:'LIFO semantics',desc:'push/pop/peek and when LIFO helps'},
       {name:'Monotonic stack',desc:'Next greater/smaller element in O(n)'},
       {name:'Parsing & matching',desc:'Balanced brackets, expression parsing'},
       {name:'Recursion → iteration',desc:'Explicit stack to avoid stack overflow'},
-      {name:'Expression evaluation',desc:'RPN / postfix evaluation'},
-    ],
+      {name:'Expression evaluation',desc:'RPN / postfix evaluation'}],
     problems:[
       {n:20,name:'Valid Parentheses',diff:'E',lc:'https://leetcode.com/problems/valid-parentheses/',nc:'https://neetcode.io/problems/validate-parentheses'},
       {n:155,name:'Min Stack',diff:'M',lc:'https://leetcode.com/problems/min-stack/',nc:'https://neetcode.io/problems/minimum-stack'},
@@ -165,25 +362,20 @@ const TOPICS=[
       {n:22,name:'Generate Parentheses',diff:'M',lc:'https://leetcode.com/problems/generate-parentheses/',nc:'https://neetcode.io/problems/generate-parentheses'},
       {n:739,name:'Daily Temperatures',diff:'M',lc:'https://leetcode.com/problems/daily-temperatures/',nc:'https://neetcode.io/problems/daily-temperatures'},
       {n:853,name:'Car Fleet',diff:'M',lc:'https://leetcode.com/problems/car-fleet/',nc:'https://neetcode.io/problems/car-fleet'},
-      {n:84,name:'Largest Rectangle in Histogram',diff:'H',lc:'https://leetcode.com/problems/largest-rectangle-in-histogram/',nc:'https://neetcode.io/problems/largest-rectangle-in-histogram'},
-    ],
+      {n:84,name:'Largest Rectangle in Histogram',diff:'H',lc:'https://leetcode.com/problems/largest-rectangle-in-histogram/',nc:'https://neetcode.io/problems/largest-rectangle-in-histogram'}],
     design:[
       {name:'Request lifecycle through a web service',desc:'DNS → LB → app → cache → DB'},
       {name:'Logs vs metrics vs traces',desc:'The three pillars of observability'},
       {name:'Alerting basics',desc:'Threshold, rate-based, anomaly'},
-      {name:'SLI, SLO, SLA',desc:'Error budgets and reliability targets'},
-    ],
-  },
-  {
-    id:4,name:'Binary Search',phase:'Search & Scan',
+      {name:'SLI, SLO, SLA',desc:'Error budgets and reliability targets'}]},
+  {id:4,name:'Binary Search',phase:'Search & Scan',
     intro:'Simple in principle, painful in practice. Master the template once and then apply to search-the-answer problems.',
     concepts:[
       {name:'Classic template',desc:'Off-by-one pitfalls; left<=right vs left<right'},
       {name:'Lower bound vs upper bound',desc:'bisect_left vs bisect_right'},
       {name:'Binary search on answer space',desc:'When the input is not sorted but the answer is monotonic'},
       {name:'2D matrix flatten',desc:'Treat mxn matrix as a flat sorted array'},
-      {name:'Rotated sorted array',desc:'Which half is sorted? Narrow accordingly'},
-    ],
+      {name:'Rotated sorted array',desc:'Which half is sorted? Narrow accordingly'}],
     problems:[
       {n:704,name:'Binary Search',diff:'E',lc:'https://leetcode.com/problems/binary-search/',nc:'https://neetcode.io/problems/binary-search'},
       {n:74,name:'Search a 2D Matrix',diff:'M',lc:'https://leetcode.com/problems/search-a-2d-matrix/',nc:'https://neetcode.io/problems/search-2d-matrix'},
@@ -191,42 +383,33 @@ const TOPICS=[
       {n:153,name:'Find Minimum in Rotated Sorted Array',diff:'M',lc:'https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/',nc:'https://neetcode.io/problems/find-minimum-in-rotated-sorted-array'},
       {n:33,name:'Search in Rotated Sorted Array',diff:'M',lc:'https://leetcode.com/problems/search-in-rotated-sorted-array/',nc:'https://neetcode.io/problems/find-target-in-rotated-sorted-array'},
       {n:981,name:'Time Based Key-Value Store',diff:'M',lc:'https://leetcode.com/problems/time-based-key-value-store/',nc:'https://neetcode.io/problems/time-based-key-value-store'},
-      {n:4,name:'Median of Two Sorted Arrays',diff:'H',lc:'https://leetcode.com/problems/median-of-two-sorted-arrays/',nc:'https://neetcode.io/problems/median-of-two-sorted-arrays'},
-    ],
+      {n:4,name:'Median of Two Sorted Arrays',diff:'H',lc:'https://leetcode.com/problems/median-of-two-sorted-arrays/',nc:'https://neetcode.io/problems/median-of-two-sorted-arrays'}],
     design:[
       {name:'Replication basics',desc:'Why replicate? For reads, for durability, for availability'},
       {name:'Leader-follower replication',desc:'Write path, read path, lag'},
       {name:'Strong vs eventual consistency',desc:'The tradeoff spectrum'},
-      {name:'Partitioning (sharding)',desc:'Range vs hash vs consistent hashing'},
-    ],
-  },
-  {
-    id:5,name:'Sliding Window',phase:'Search & Scan',
+      {name:'Partitioning (sharding)',desc:'Range vs hash vs consistent hashing'}]},
+  {id:5,name:'Sliding Window',phase:'Search & Scan',
     intro:'Linear-time reasoning over contiguous subarrays/substrings. Expand then contract; maintain a window invariant.',
     concepts:[
       {name:'Fixed vs variable window',desc:'Known size vs grow-then-shrink'},
       {name:'Window expansion & contraction',desc:'When to move each pointer'},
       {name:'Window state / invariant',desc:'Counter, sum, max — what are we tracking?'},
       {name:'Two pointers as window bounds',desc:'Left and right both monotonic'},
-      {name:'When to shrink',desc:'Invariant violated → tighten'},
-    ],
+      {name:'When to shrink',desc:'Invariant violated → tighten'}],
     problems:[
       {n:121,name:'Best Time to Buy and Sell Stock',diff:'E',lc:'https://leetcode.com/problems/best-time-to-buy-and-sell-stock/',nc:'https://neetcode.io/problems/buy-and-sell-crypto'},
       {n:3,name:'Longest Substring Without Repeating Characters',diff:'M',lc:'https://leetcode.com/problems/longest-substring-without-repeating-characters/',nc:'https://neetcode.io/problems/longest-substring-without-duplicates'},
       {n:424,name:'Longest Repeating Character Replacement',diff:'M',lc:'https://leetcode.com/problems/longest-repeating-character-replacement/',nc:'https://neetcode.io/problems/longest-repeating-substring-with-replacement'},
       {n:567,name:'Permutation in String',diff:'M',lc:'https://leetcode.com/problems/permutation-in-string/',nc:'https://neetcode.io/problems/permutation-string'},
       {n:76,name:'Minimum Window Substring',diff:'H',lc:'https://leetcode.com/problems/minimum-window-substring/',nc:'https://neetcode.io/problems/minimum-window-with-characters'},
-      {n:239,name:'Sliding Window Maximum',diff:'H',lc:'https://leetcode.com/problems/sliding-window-maximum/',nc:'https://neetcode.io/problems/sliding-window-maximum'},
-    ],
+      {n:239,name:'Sliding Window Maximum',diff:'H',lc:'https://leetcode.com/problems/sliding-window-maximum/',nc:'https://neetcode.io/problems/sliding-window-maximum'}],
     design:[
       {name:'Read-heavy vs write-heavy systems',desc:'Design implications of each'},
       {name:'SQL vs NoSQL',desc:'When relational, when document, when KV'},
       {name:'Primary key, index, query path',desc:'Design for the read pattern'},
-      {name:'Normalization vs denormalization',desc:'Joins vs read amplification'},
-    ],
-  },
-  {
-    id:6,name:'Linked List',phase:'Search & Scan',
+      {name:'Normalization vs denormalization',desc:'Joins vs read amplification'}]},
+  {id:6,name:'Linked List',phase:'Search & Scan',
     intro:'Pointer manipulation. Slow and deliberate beats clever. Draw pictures.',
     concepts:[
       {name:'Singly vs doubly linked',desc:'When back-pointers earn their keep'},
@@ -234,8 +417,7 @@ const TOPICS=[
       {name:"Floyd's cycle detection",desc:'Slow/fast pointers for cycles and midpoint'},
       {name:'In-place reversal',desc:'prev/curr/next dance'},
       {name:'Merging operations',desc:'Weaving two sorted lists'},
-      {name:'Pointer manipulation pitfalls',desc:'NPE, losing references, order of assignments'},
-    ],
+      {name:'Pointer manipulation pitfalls',desc:'NPE, losing references, order of assignments'}],
     problems:[
       {n:206,name:'Reverse Linked List',diff:'E',lc:'https://leetcode.com/problems/reverse-linked-list/',nc:'https://neetcode.io/problems/reverse-a-linked-list'},
       {n:21,name:'Merge Two Sorted Lists',diff:'E',lc:'https://leetcode.com/problems/merge-two-sorted-lists/',nc:'https://neetcode.io/problems/merge-two-sorted-linked-lists'},
@@ -246,17 +428,13 @@ const TOPICS=[
       {n:2,name:'Add Two Numbers',diff:'M',lc:'https://leetcode.com/problems/add-two-numbers/',nc:'https://neetcode.io/problems/add-two-numbers'},
       {n:287,name:'Find the Duplicate Number',diff:'M',lc:'https://leetcode.com/problems/find-the-duplicate-number/',nc:'https://neetcode.io/problems/find-duplicate-integer'},
       {n:146,name:'LRU Cache',diff:'M',lc:'https://leetcode.com/problems/lru-cache/',nc:'https://neetcode.io/problems/lru-cache'},
-      {n:23,name:'Merge k Sorted Lists',diff:'H',lc:'https://leetcode.com/problems/merge-k-sorted-lists/',nc:'https://neetcode.io/problems/merge-k-sorted-linked-lists'},
-    ],
+      {n:23,name:'Merge k Sorted Lists',diff:'H',lc:'https://leetcode.com/problems/merge-k-sorted-lists/',nc:'https://neetcode.io/problems/merge-k-sorted-linked-lists'}],
     design:[
       {name:'API design basics and REST',desc:'Resources, verbs, status codes'},
       {name:'Idempotency',desc:'Retry-safe operations, idempotency keys'},
       {name:'Retries, timeouts, backoff',desc:'Exponential backoff, jitter, deadlines'},
-      {name:'Pagination — offset vs cursor',desc:'Why cursors scale; stable ordering'},
-    ],
-  },
-  {
-    id:7,name:'Trees',phase:'Trees',
+      {name:'Pagination — offset vs cursor',desc:'Why cursors scale; stable ordering'}]},
+  {id:7,name:'Trees',phase:'Trees',
     intro:'Recursion lives here. Almost every tree problem is a tiny recursion with a well-chosen return value.',
     concepts:[
       {name:'Recursion on trees',desc:'The tree itself mirrors the call stack'},
@@ -265,8 +443,7 @@ const TOPICS=[
       {name:'BST invariant',desc:'Left < root < right, in-order gives sorted'},
       {name:'Tree height/depth',desc:'Recursive definitions'},
       {name:'Balanced trees',desc:'What "balanced" means, why it matters'},
-      {name:'Tree serialization',desc:'Preorder with nulls, level-order'},
-    ],
+      {name:'Tree serialization',desc:'Preorder with nulls, level-order'}],
     problems:[
       {n:226,name:'Invert Binary Tree',diff:'E',lc:'https://leetcode.com/problems/invert-binary-tree/',nc:'https://neetcode.io/problems/invert-a-binary-tree'},
       {n:104,name:'Maximum Depth of Binary Tree',diff:'E',lc:'https://leetcode.com/problems/maximum-depth-of-binary-tree/',nc:'https://neetcode.io/problems/depth-of-binary-tree'},
@@ -277,49 +454,39 @@ const TOPICS=[
       {n:199,name:'Binary Tree Right Side View',diff:'M',lc:'https://leetcode.com/problems/binary-tree-right-side-view/',nc:'https://neetcode.io/problems/binary-tree-right-side-view'},
       {n:98,name:'Validate Binary Search Tree',diff:'M',lc:'https://leetcode.com/problems/validate-binary-search-tree/',nc:'https://neetcode.io/problems/valid-binary-search-tree'},
       {n:124,name:'Binary Tree Maximum Path Sum',diff:'H',lc:'https://leetcode.com/problems/binary-tree-maximum-path-sum/',nc:'https://neetcode.io/problems/binary-tree-maximum-path-sum'},
-      {n:297,name:'Serialize and Deserialize Binary Tree',diff:'H',lc:'https://leetcode.com/problems/serialize-and-deserialize-binary-tree/',nc:'https://neetcode.io/problems/serialize-and-deserialize-binary-tree'},
-    ],
+      {n:297,name:'Serialize and Deserialize Binary Tree',diff:'H',lc:'https://leetcode.com/problems/serialize-and-deserialize-binary-tree/',nc:'https://neetcode.io/problems/serialize-and-deserialize-binary-tree'}],
     design:[
       {name:'Service decomposition',desc:'Monolith → services; bounded contexts'},
       {name:'Secondary indexes',desc:'Why they exist and what they cost'},
       {name:'Hierarchical data modeling',desc:'Adjacency list, path enumeration, nested sets'},
-      {name:'Metadata services',desc:'Catalog patterns, lookups'},
-    ],
-  },
-  {
-    id:8,name:'Tries',phase:'Trees',
+      {name:'Metadata services',desc:'Catalog patterns, lookups'}]},
+  {id:8,name:'Tries',phase:'Trees',
     intro:'A specialized tree for prefix queries. Small family of problems, but interview-popular.',
     concepts:[
       {name:'Prefix tree structure',desc:'Children by character, terminal flag'},
       {name:'Insert / search / startsWith',desc:'The three core ops'},
       {name:'Wildcard matching',desc:'DFS over children when . is encountered'},
       {name:'Word bank + DFS combo',desc:'Trie as the pruning structure for grid search'},
-      {name:'Compressed tries (radix)',desc:'Conceptual awareness only'},
-    ],
+      {name:'Compressed tries (radix)',desc:'Conceptual awareness only'}],
     problems:[
       {n:208,name:'Implement Trie (Prefix Tree)',diff:'M',lc:'https://leetcode.com/problems/implement-trie-prefix-tree/',nc:'https://neetcode.io/problems/implement-prefix-tree'},
       {n:211,name:'Design Add and Search Words Data Structure',diff:'M',lc:'https://leetcode.com/problems/design-add-and-search-words-data-structure/',nc:'https://neetcode.io/problems/design-word-search-data-structure'},
       {n:212,name:'Word Search II',diff:'H',lc:'https://leetcode.com/problems/word-search-ii/',nc:'https://neetcode.io/problems/search-for-word-ii'},
       {n:648,name:'Replace Words',diff:'M',lc:'https://leetcode.com/problems/replace-words/',nc:null},
-      {n:642,name:'Design Search Autocomplete System',diff:'H',prem:1,lc:'https://leetcode.com/problems/design-search-autocomplete-system/',nc:null},
-    ],
+      {n:642,name:'Design Search Autocomplete System',diff:'H',prem:1,lc:'https://leetcode.com/problems/design-search-autocomplete-system/',nc:null}],
     design:[
       {name:'Autocomplete system basics',desc:'Prefix index, top-k ranking, latency budget'},
       {name:'Indexing for prefix queries',desc:'Trie vs sorted+binary search'},
       {name:'Dictionary service',desc:'Lexicon-backed retrieval, hot-path lookups'},
-      {name:'Precomputation vs online computation',desc:'Where to pay the cost'},
-    ],
-  },
-  {
-    id:9,name:'Heap / Priority Queue',phase:'Trees',
+      {name:'Precomputation vs online computation',desc:'Where to pay the cost'}]},
+  {id:9,name:'Heap / Priority Queue',phase:'Trees',
     intro:'When you need the smallest/largest k things, a heap is almost always the answer.',
     concepts:[
       {name:'Min-heap vs max-heap',desc:'Python: heapq is min-heap; negate for max'},
       {name:'Heapify O(n)',desc:'Build from array in linear time'},
       {name:'Kth element pattern',desc:'Heap of size k → O(n log k)'},
       {name:'Two-heap pattern',desc:'Median via max-heap of lower half + min-heap of upper half'},
-      {name:'Custom comparators',desc:'Tuples, __lt__, negated keys'},
-    ],
+      {name:'Custom comparators',desc:'Tuples, __lt__, negated keys'}],
     problems:[
       {n:703,name:'Kth Largest Element in a Stream',diff:'E',lc:'https://leetcode.com/problems/kth-largest-element-in-a-stream/',nc:'https://neetcode.io/problems/kth-largest-integer-in-a-stream'},
       {n:1046,name:'Last Stone Weight',diff:'E',lc:'https://leetcode.com/problems/last-stone-weight/',nc:'https://neetcode.io/problems/last-stone-weight'},
@@ -327,25 +494,20 @@ const TOPICS=[
       {n:215,name:'Kth Largest Element in an Array',diff:'M',lc:'https://leetcode.com/problems/kth-largest-element-in-an-array/',nc:'https://neetcode.io/problems/kth-largest-element-in-an-array'},
       {n:621,name:'Task Scheduler',diff:'M',lc:'https://leetcode.com/problems/task-scheduler/',nc:'https://neetcode.io/problems/task-scheduling'},
       {n:355,name:'Design Twitter',diff:'M',lc:'https://leetcode.com/problems/design-twitter/',nc:'https://neetcode.io/problems/design-twitter-feed'},
-      {n:295,name:'Find Median from Data Stream',diff:'H',lc:'https://leetcode.com/problems/find-median-from-data-stream/',nc:'https://neetcode.io/problems/find-median-in-a-data-stream'},
-    ],
+      {n:295,name:'Find Median from Data Stream',diff:'H',lc:'https://leetcode.com/problems/find-median-from-data-stream/',nc:'https://neetcode.io/problems/find-median-in-a-data-stream'}],
     design:[
       {name:'Message queues basics',desc:'Producer, consumer, broker, delivery semantics'},
       {name:'Queue vs pub/sub',desc:'Work distribution vs fanout'},
       {name:'Kafka — partitions and consumers',desc:'Ordering guarantees, consumer groups'},
-      {name:'Backpressure basics',desc:'What happens when consumers fall behind'},
-    ],
-  },
-  {
-    id:10,name:'Backtracking',phase:'Recursion & Graphs',
+      {name:'Backpressure basics',desc:'What happens when consumers fall behind'}]},
+  {id:10,name:'Backtracking',phase:'Recursion & Graphs',
     intro:'Structured brute force. Choose, explore, unchoose. Prune when you can.',
     concepts:[
       {name:'Recursion tree visualization',desc:'Sketch the tree before coding'},
       {name:'Choose / explore / unchoose',desc:'The backtracking skeleton'},
       {name:'Pruning branches',desc:'Cut branches that cannot lead to solutions'},
       {name:'Handling duplicates',desc:'Sort + skip-on-same-as-previous'},
-      {name:'Combinations vs permutations vs subsets',desc:'When order matters, when it does not'},
-    ],
+      {name:'Combinations vs permutations vs subsets',desc:'When order matters, when it does not'}],
     problems:[
       {n:78,name:'Subsets',diff:'M',lc:'https://leetcode.com/problems/subsets/',nc:'https://neetcode.io/problems/subsets'},
       {n:39,name:'Combination Sum',diff:'M',lc:'https://leetcode.com/problems/combination-sum/',nc:'https://neetcode.io/problems/combination-target-sum'},
@@ -355,17 +517,13 @@ const TOPICS=[
       {n:79,name:'Word Search',diff:'M',lc:'https://leetcode.com/problems/word-search/',nc:'https://neetcode.io/problems/search-for-word'},
       {n:131,name:'Palindrome Partitioning',diff:'M',lc:'https://leetcode.com/problems/palindrome-partitioning/',nc:'https://neetcode.io/problems/palindrome-partitioning'},
       {n:17,name:'Letter Combinations of a Phone Number',diff:'M',lc:'https://leetcode.com/problems/letter-combinations-of-a-phone-number/',nc:'https://neetcode.io/problems/combinations-of-a-phone-number'},
-      {n:51,name:'N-Queens',diff:'H',lc:'https://leetcode.com/problems/n-queens/',nc:'https://neetcode.io/problems/n-queens'},
-    ],
+      {n:51,name:'N-Queens',diff:'H',lc:'https://leetcode.com/problems/n-queens/',nc:'https://neetcode.io/problems/n-queens'}],
     design:[
       {name:'Search space explosion & pruning',desc:'How to reason about exponential spaces'},
       {name:'Brute force vs guided search',desc:'When structure lets you be smarter'},
       {name:'Branch-and-bound intuition',desc:'Bound the search with known limits'},
-      {name:'State tracking and rollback',desc:'Transactions, compensations, sagas'},
-    ],
-  },
-  {
-    id:11,name:'Graphs',phase:'Recursion & Graphs',
+      {name:'State tracking and rollback',desc:'Transactions, compensations, sagas'}]},
+  {id:11,name:'Graphs',phase:'Recursion & Graphs',
     intro:'BFS and DFS generalize from trees. Most graph interview problems are one of these two plus a representation choice.',
     concepts:[
       {name:'Adjacency list vs matrix',desc:'Memory & time tradeoffs'},
@@ -374,8 +532,7 @@ const TOPICS=[
       {name:'Directed vs undirected',desc:'Double edges, cycle implications'},
       {name:'Cycle detection',desc:'DFS with color states; Union-Find for undirected'},
       {name:'Connected components',desc:'Traverse-and-count pattern'},
-      {name:'Topological sort (intro)',desc:"Kahn's BFS / DFS post-order reverse"},
-    ],
+      {name:'Topological sort (intro)',desc:"Kahn's BFS / DFS post-order reverse"}],
     problems:[
       {n:200,name:'Number of Islands',diff:'M',lc:'https://leetcode.com/problems/number-of-islands/',nc:'https://neetcode.io/problems/count-number-of-islands'},
       {n:695,name:'Max Area of Island',diff:'M',lc:'https://leetcode.com/problems/max-area-of-island/',nc:'https://neetcode.io/problems/max-area-of-island'},
@@ -386,17 +543,13 @@ const TOPICS=[
       {n:207,name:'Course Schedule',diff:'M',lc:'https://leetcode.com/problems/course-schedule/',nc:'https://neetcode.io/problems/course-schedule'},
       {n:210,name:'Course Schedule II',diff:'M',lc:'https://leetcode.com/problems/course-schedule-ii/',nc:'https://neetcode.io/problems/course-schedule-ii'},
       {n:684,name:'Redundant Connection',diff:'M',lc:'https://leetcode.com/problems/redundant-connection/',nc:'https://neetcode.io/problems/redundant-connection'},
-      {n:127,name:'Word Ladder',diff:'H',lc:'https://leetcode.com/problems/word-ladder/',nc:'https://neetcode.io/problems/word-ladder'},
-    ],
+      {n:127,name:'Word Ladder',diff:'H',lc:'https://leetcode.com/problems/word-ladder/',nc:'https://neetcode.io/problems/word-ladder'}],
     design:[
       {name:'Dependency & network graphs',desc:'Service mesh, call graph'},
       {name:'Service dependency graphs',desc:'Understanding blast radius'},
       {name:'Failure domains & blast radius',desc:'Isolation boundaries'},
-      {name:'DAGs in pipelines & orchestration',desc:'Airflow, Kafka Streams topologies'},
-    ],
-  },
-  {
-    id:12,name:'Advanced Graphs',phase:'Recursion & Graphs',
+      {name:'DAGs in pipelines & orchestration',desc:'Airflow, Kafka Streams topologies'}]},
+  {id:12,name:'Advanced Graphs',phase:'Recursion & Graphs',
     intro:'Shortest paths, spanning trees, topological sort. Interview frequency is lower, but impact is high when they appear.',
     concepts:[
       {name:"Dijkstra's algorithm",desc:'Non-negative weights, min-heap'},
@@ -404,25 +557,20 @@ const TOPICS=[
       {name:'MST: Prim & Kruskal',desc:'Minimum spanning tree — two standard approaches'},
       {name:'Union-Find (DSU)',desc:'Path compression + union by rank; near-O(1)'},
       {name:'Topological sort',desc:"Kahn's BFS, DFS post-order reverse"},
-      {name:'Euler path/circuit',desc:"Hierholzer's — every edge exactly once"},
-    ],
+      {name:'Euler path/circuit',desc:"Hierholzer's — every edge exactly once"}],
     problems:[
       {n:743,name:'Network Delay Time',diff:'M',lc:'https://leetcode.com/problems/network-delay-time/',nc:'https://neetcode.io/problems/network-delay-time'},
       {n:1584,name:'Min Cost to Connect All Points',diff:'M',lc:'https://leetcode.com/problems/min-cost-to-connect-all-points/',nc:'https://neetcode.io/problems/min-cost-to-connect-points'},
       {n:787,name:'Cheapest Flights Within K Stops',diff:'M',lc:'https://leetcode.com/problems/cheapest-flights-within-k-stops/',nc:'https://neetcode.io/problems/cheapest-flights-within-k-stops'},
       {n:332,name:'Reconstruct Itinerary',diff:'H',lc:'https://leetcode.com/problems/reconstruct-itinerary/',nc:'https://neetcode.io/problems/reconstruct-flight-path'},
       {n:778,name:'Swim in Rising Water',diff:'H',lc:'https://leetcode.com/problems/swim-in-rising-water/',nc:'https://neetcode.io/problems/swim-in-rising-water'},
-      {n:269,name:'Alien Dictionary',diff:'H',prem:1,lc:'https://leetcode.com/problems/alien-dictionary/',nc:'https://neetcode.io/problems/foreign-dictionary'},
-    ],
+      {n:269,name:'Alien Dictionary',diff:'H',prem:1,lc:'https://leetcode.com/problems/alien-dictionary/',nc:'https://neetcode.io/problems/foreign-dictionary'}],
     design:[
       {name:'Shortest-path routing',desc:'Applied to networks and route planners'},
       {name:'MST in network design',desc:'Cheapest spanning infrastructure'},
       {name:'Distributed consensus & ordering',desc:'Raft / Paxos awareness'},
-      {name:'Multi-hop cost optimization',desc:'Routing with budget constraints'},
-    ],
-  },
-  {
-    id:13,name:'1-D DP',phase:'DP & Optimization',
+      {name:'Multi-hop cost optimization',desc:'Routing with budget constraints'}]},
+  {id:13,name:'1-D DP',phase:'DP & Optimization',
     intro:'Dynamic programming, starting with linear state. Define state, transition, base case, then optimize space.',
     concepts:[
       {name:'Memoization vs tabulation',desc:'Top-down vs bottom-up; same recurrence'},
@@ -430,8 +578,7 @@ const TOPICS=[
       {name:'Transition function',desc:'dp[i] expressed in terms of earlier states'},
       {name:'Base cases',desc:'The smallest problems where the answer is obvious'},
       {name:'Space optimization',desc:'Rolling array when only last k states matter'},
-      {name:'Subsequence vs substring',desc:"Different state shapes"},
-    ],
+      {name:'Subsequence vs substring',desc:"Different state shapes"}],
     problems:[
       {n:70,name:'Climbing Stairs',diff:'E',lc:'https://leetcode.com/problems/climbing-stairs/',nc:'https://neetcode.io/problems/climbing-stairs'},
       {n:198,name:'House Robber',diff:'M',lc:'https://leetcode.com/problems/house-robber/',nc:'https://neetcode.io/problems/house-robber'},
@@ -443,17 +590,13 @@ const TOPICS=[
       {n:152,name:'Maximum Product Subarray',diff:'M',lc:'https://leetcode.com/problems/maximum-product-subarray/',nc:'https://neetcode.io/problems/maximum-product-subarray'},
       {n:139,name:'Word Break',diff:'M',lc:'https://leetcode.com/problems/word-break/',nc:'https://neetcode.io/problems/word-break'},
       {n:300,name:'Longest Increasing Subsequence',diff:'M',lc:'https://leetcode.com/problems/longest-increasing-subsequence/',nc:'https://neetcode.io/problems/longest-increasing-subsequence'},
-      {n:416,name:'Partition Equal Subset Sum',diff:'M',lc:'https://leetcode.com/problems/partition-equal-subset-sum/',nc:'https://neetcode.io/problems/partition-equal-subset-sum'},
-    ],
+      {n:416,name:'Partition Equal Subset Sum',diff:'M',lc:'https://leetcode.com/problems/partition-equal-subset-sum/',nc:'https://neetcode.io/problems/partition-equal-subset-sum'}],
     design:[
       {name:'Memoization as caching analogy',desc:'Same idea in a different context'},
       {name:'Local optimum vs global objective',desc:'When local greedy fails'},
       {name:'Minimizing cost under constraints',desc:'Resource allocation mental model'},
-      {name:'State compression',desc:'Representing state compactly when the domain allows'},
-    ],
-  },
-  {
-    id:14,name:'2-D DP',phase:'DP & Optimization',
+      {name:'State compression',desc:'Representing state compactly when the domain allows'}]},
+  {id:14,name:'2-D DP',phase:'DP & Optimization',
     intro:'Two-dimensional state. Grid DP, string alignment, knapsack. The patterns repeat.',
     concepts:[
       {name:'Grid DP (paths, obstacles)',desc:'dp[i][j] from dp[i-1][j] and dp[i][j-1]'},
@@ -461,8 +604,7 @@ const TOPICS=[
       {name:'Subsequence DP',desc:'Include/exclude decisions'},
       {name:'Knapsack variants (0/1, unbounded)',desc:"The archetypal 2-D DP"},
       {name:'Interval DP',desc:'dp[i][j] over ranges, split point'},
-      {name:'State compression in 2-D',desc:"Two rows instead of full matrix"},
-    ],
+      {name:'State compression in 2-D',desc:"Two rows instead of full matrix"}],
     problems:[
       {n:62,name:'Unique Paths',diff:'M',lc:'https://leetcode.com/problems/unique-paths/',nc:'https://neetcode.io/problems/count-paths'},
       {n:1143,name:'Longest Common Subsequence',diff:'M',lc:'https://leetcode.com/problems/longest-common-subsequence/',nc:'https://neetcode.io/problems/longest-common-subsequence'},
@@ -473,50 +615,40 @@ const TOPICS=[
       {n:72,name:'Edit Distance',diff:'M',lc:'https://leetcode.com/problems/edit-distance/',nc:'https://neetcode.io/problems/edit-distance'},
       {n:329,name:'Longest Increasing Path in a Matrix',diff:'H',lc:'https://leetcode.com/problems/longest-increasing-path-in-a-matrix/',nc:'https://neetcode.io/problems/longest-increasing-path-in-matrix'},
       {n:115,name:'Distinct Subsequences',diff:'H',lc:'https://leetcode.com/problems/distinct-subsequences/',nc:'https://neetcode.io/problems/count-subsequences'},
-      {n:10,name:'Regular Expression Matching',diff:'H',lc:'https://leetcode.com/problems/regular-expression-matching/',nc:'https://neetcode.io/problems/regular-expression-matching'},
-    ],
+      {n:10,name:'Regular Expression Matching',diff:'H',lc:'https://leetcode.com/problems/regular-expression-matching/',nc:'https://neetcode.io/problems/regular-expression-matching'}],
     design:[
       {name:'Grid/matrix computation',desc:'When problems map to spatial DP'},
       {name:'String alignment (diff/merge)',desc:'Edit distance in version control, bioinformatics'},
       {name:'Knapsack variants in allocation',desc:'Budgeted decisions at scale'},
-      {name:'Multi-dimensional caching',desc:'Composite keys, eviction policy'},
-    ],
-  },
-  {
-    id:15,name:'Intervals',phase:'DP & Optimization',
+      {name:'Multi-dimensional caching',desc:'Composite keys, eviction policy'}]},
+  {id:15,name:'Intervals',phase:'DP & Optimization',
     intro:'Sort by start or end, then scan. A small pattern, but it comes up constantly.',
     concepts:[
       {name:'Sort by start / end',desc:'Which to choose depends on the problem'},
       {name:'Merge-overlap pattern',desc:"If current.start <= last.end, merge"},
       {name:'Sweep line',desc:'Events at start (+1) and end (-1)'},
       {name:'Min-heap for active intervals',desc:'Meeting rooms, active-count problems'},
-      {name:'Overlap detection',desc:'max(starts) < min(ends)'},
-    ],
+      {name:'Overlap detection',desc:'max(starts) < min(ends)'}],
     problems:[
       {n:57,name:'Insert Interval',diff:'M',lc:'https://leetcode.com/problems/insert-interval/',nc:'https://neetcode.io/problems/insert-new-interval'},
       {n:56,name:'Merge Intervals',diff:'M',lc:'https://leetcode.com/problems/merge-intervals/',nc:'https://neetcode.io/problems/merge-intervals'},
       {n:435,name:'Non-overlapping Intervals',diff:'M',lc:'https://leetcode.com/problems/non-overlapping-intervals/',nc:'https://neetcode.io/problems/non-overlapping-intervals'},
       {n:252,name:'Meeting Rooms',diff:'E',prem:1,lc:'https://leetcode.com/problems/meeting-rooms/',nc:'https://neetcode.io/problems/meeting-schedule'},
       {n:253,name:'Meeting Rooms II',diff:'M',prem:1,lc:'https://leetcode.com/problems/meeting-rooms-ii/',nc:'https://neetcode.io/problems/meeting-schedule-ii'},
-      {n:1851,name:'Minimum Interval to Include Each Query',diff:'H',lc:'https://leetcode.com/problems/minimum-interval-to-include-each-query/',nc:'https://neetcode.io/problems/minimum-interval-including-query'},
-    ],
+      {n:1851,name:'Minimum Interval to Include Each Query',diff:'H',lc:'https://leetcode.com/problems/minimum-interval-to-include-each-query/',nc:'https://neetcode.io/problems/minimum-interval-including-query'}],
     design:[
       {name:'Scheduling systems basics',desc:'Resource allocation over time'},
       {name:'Conflict resolution in scheduling',desc:'Priority, preemption, merge'},
       {name:'Optimistic vs pessimistic concurrency',desc:'Locks vs CAS vs version checks'},
-      {name:'Distributed locks basics',desc:'Leases, fencing tokens'},
-    ],
-  },
-  {
-    id:16,name:'Greedy',phase:'DP & Optimization',
+      {name:'Distributed locks basics',desc:'Leases, fencing tokens'}]},
+  {id:16,name:'Greedy',phase:'DP & Optimization',
     intro:'Sometimes the local optimum is the global optimum. The hard part is proving it (or finding the counter-example).',
     concepts:[
       {name:'Greedy choice property',desc:'What it is and why it is non-trivial to show'},
       {name:'Exchange argument',desc:'Proof pattern: any other solution can be transformed without loss'},
       {name:'Sort then scan',desc:"Most greedy problems start with sorting"},
       {name:'When greedy fails',desc:'Recognize when you need DP instead'},
-      {name:'Counter-example thinking',desc:'Stress-test before committing'},
-    ],
+      {name:'Counter-example thinking',desc:'Stress-test before committing'}],
     problems:[
       {n:53,name:'Maximum Subarray',diff:'M',lc:'https://leetcode.com/problems/maximum-subarray/',nc:'https://neetcode.io/problems/maximum-subarray'},
       {n:55,name:'Jump Game',diff:'M',lc:'https://leetcode.com/problems/jump-game/',nc:'https://neetcode.io/problems/jump-game'},
@@ -525,17 +657,13 @@ const TOPICS=[
       {n:846,name:'Hand of Straights',diff:'M',lc:'https://leetcode.com/problems/hand-of-straights/',nc:'https://neetcode.io/problems/hand-of-straights'},
       {n:1899,name:'Merge Triplets to Form Target Triplet',diff:'M',lc:'https://leetcode.com/problems/merge-triplets-to-form-target-triplet/',nc:'https://neetcode.io/problems/merge-triplets-to-form-target'},
       {n:763,name:'Partition Labels',diff:'M',lc:'https://leetcode.com/problems/partition-labels/',nc:'https://neetcode.io/problems/partition-labels'},
-      {n:678,name:'Valid Parenthesis String',diff:'M',lc:'https://leetcode.com/problems/valid-parenthesis-string/',nc:'https://neetcode.io/problems/valid-parenthesis-string'},
-    ],
+      {n:678,name:'Valid Parenthesis String',diff:'M',lc:'https://leetcode.com/problems/valid-parenthesis-string/',nc:'https://neetcode.io/problems/valid-parenthesis-string'}],
     design:[
       {name:'Greedy choice and feasibility',desc:'When simple heuristics suffice'},
       {name:'Greedy optimization',desc:'Frontier expansion, always take the cheapest'},
       {name:'Cost-aware routing',desc:'Greedy approximations for hard problems'},
-      {name:'Admission control',desc:'Greedy acceptance/rejection under load'},
-    ],
-  },
-  {
-    id:17,name:'Bit Manipulation',phase:'Numerics',
+      {name:'Admission control',desc:'Greedy acceptance/rejection under load'}]},
+  {id:17,name:'Bit Manipulation',phase:'Numerics',
     intro:'Niche but elegant. Master the vocabulary once; these tricks are permanent.',
     concepts:[
       {name:'AND, OR, XOR, NOT',desc:'The core operators'},
@@ -543,8 +671,7 @@ const TOPICS=[
       {name:'Masks and bit checks',desc:'n & (1<<i); set/clear/toggle'},
       {name:'XOR tricks',desc:'a ^ a = 0; finding the singleton'},
       {name:'Counting bits',desc:"Brian Kernighan's trick: n & (n-1)"},
-      {name:'Bitmask DP',desc:'Represent subset as an int'},
-    ],
+      {name:'Bitmask DP',desc:'Represent subset as an int'}],
     problems:[
       {n:136,name:'Single Number',diff:'E',lc:'https://leetcode.com/problems/single-number/',nc:'https://neetcode.io/problems/single-number'},
       {n:191,name:'Number of 1 Bits',diff:'E',lc:'https://leetcode.com/problems/number-of-1-bits/',nc:'https://neetcode.io/problems/number-of-one-bits'},
@@ -552,17 +679,13 @@ const TOPICS=[
       {n:190,name:'Reverse Bits',diff:'E',lc:'https://leetcode.com/problems/reverse-bits/',nc:'https://neetcode.io/problems/reverse-bits'},
       {n:268,name:'Missing Number',diff:'E',lc:'https://leetcode.com/problems/missing-number/',nc:'https://neetcode.io/problems/missing-number'},
       {n:371,name:'Sum of Two Integers',diff:'M',lc:'https://leetcode.com/problems/sum-of-two-integers/',nc:'https://neetcode.io/problems/sum-of-two-integers'},
-      {n:7,name:'Reverse Integer',diff:'M',lc:'https://leetcode.com/problems/reverse-integer/',nc:'https://neetcode.io/problems/reverse-integer'},
-    ],
+      {n:7,name:'Reverse Integer',diff:'M',lc:'https://leetcode.com/problems/reverse-integer/',nc:'https://neetcode.io/problems/reverse-integer'}],
     design:[
       {name:'Bitmask DP & compact state',desc:'Representing feature sets or visited nodes'},
       {name:'Feature flags and configuration',desc:'Packed config representation'},
       {name:'Checksums and error detection',desc:'CRC, parity, hashing'},
-      {name:'Bloom filters',desc:'Probabilistic set membership'},
-    ],
-  },
-  {
-    id:18,name:'Math & Geometry',phase:'Numerics',
+      {name:'Bloom filters',desc:'Probabilistic set membership'}]},
+  {id:18,name:'Math & Geometry',phase:'Numerics',
     intro:'A grab-bag. Matrix manipulation, modular arithmetic, and a few classics that every candidate is expected to know.',
     concepts:[
       {name:'Matrix manipulation',desc:'Rotate in place, transpose'},
@@ -570,8 +693,7 @@ const TOPICS=[
       {name:'Modular arithmetic',desc:'(a + b) % m, (a * b) % m, negative mod'},
       {name:'Fast exponentiation',desc:'O(log n) pow via squaring'},
       {name:'Coordinate geometry',desc:'Distance, slope, squares/rectangles'},
-      {name:'Cycle detection in numbers',desc:'Happy number — Floyd applies'},
-    ],
+      {name:'Cycle detection in numbers',desc:'Happy number — Floyd applies'}],
     problems:[
       {n:48,name:'Rotate Image',diff:'M',lc:'https://leetcode.com/problems/rotate-image/',nc:'https://neetcode.io/problems/rotate-matrix'},
       {n:54,name:'Spiral Matrix',diff:'M',lc:'https://leetcode.com/problems/spiral-matrix/',nc:'https://neetcode.io/problems/spiral-matrix'},
@@ -580,255 +702,815 @@ const TOPICS=[
       {n:66,name:'Plus One',diff:'E',lc:'https://leetcode.com/problems/plus-one/',nc:'https://neetcode.io/problems/plus-one'},
       {n:50,name:'Pow(x, n)',diff:'M',lc:'https://leetcode.com/problems/powx-n/',nc:'https://neetcode.io/problems/pow-x-n'},
       {n:43,name:'Multiply Strings',diff:'M',lc:'https://leetcode.com/problems/multiply-strings/',nc:'https://neetcode.io/problems/multiply-strings'},
-      {n:2013,name:'Detect Squares',diff:'M',lc:'https://leetcode.com/problems/detect-squares/',nc:'https://neetcode.io/problems/count-squares'},
-    ],
+      {n:2013,name:'Detect Squares',diff:'M',lc:'https://leetcode.com/problems/detect-squares/',nc:'https://neetcode.io/problems/count-squares'}],
     design:[
       {name:'Coordinate systems & transforms',desc:'Where math meets engineering'},
       {name:'Modular hashing',desc:'Hash-table uniformity, consistent hashing'},
       {name:'Geohashing / spatial indexing',desc:'Location-based services'},
-      {name:'Randomization & sampling',desc:'Reservoir sampling, weighted choice'},
-    ],
-  },
+      {name:'Randomization & sampling',desc:'Reservoir sampling, weighted choice'}]}
 ];
 
 const PHASES=['Foundations','Search & Scan','Trees','Recursion & Graphs','DP & Optimization','Numerics'];
-const PHASE_COLORS=['#534AB7','#1D9E75','#3B6D11','#D85A30','#BA7517','#8B6B14'];
-const DOT_CLASSES=['dot-f','dot-f1','dot-f2','dot-f3','dot-f4','dot-f5'];
+const PHASE_COLORS={'Foundations':'#534AB7','Search & Scan':'#1D9E75','Trees':'#3B6D11','Recursion & Graphs':'#D85A30','DP & Optimization':'#BA7517','Numerics':'#8B6B14'};
 
-// =============================================================
-// STATE & STORAGE
-// =============================================================
+// ════════════════════════════════════════════════════════════════
+// STATE & STORAGE — backward compatible with original keys
+// ════════════════════════════════════════════════════════════════
+const TOPIC_KEY=t=>`ip_topic_${t}`;
+const META_KEY='ip_meta_v1';
+
 function defTopicState(topic){
   const s={problems:{},concepts:{},design:{},notes:'',conceptNotes:'',designNotes:''};
-  topic.problems.forEach(p=>{
-    s.problems[p.n]={status:'Not Started',color:null,conf:0,time:'',notes:'',timed:false,explain:false,redo:false};
-  });
+  topic.problems.forEach(p=>{s.problems[p.n]={status:'Not Started',color:null,conf:0,time:'',notes:'',timed:false,explain:false,redo:false};});
   topic.concepts.forEach((c,i)=>{s.concepts[i]=false;});
   topic.design.forEach((d,i)=>{s.design[i]={checked:false,status:'Not Started'};});
   return s;
 }
+function defMeta(){return{theme:'light',lastTopicId:1,activity:{},lastVisited:{},celebrated:{}};}
 
-const KEY=t=>`ip_topic_${t}`;
-async function load(t){try{const r=await window.storage.get(KEY(t));return r?JSON.parse(r.value):null;}catch{return null;}}
-async function save(t,v){try{await window.storage.set(KEY(t),JSON.stringify(v));}catch{}}
-
-let CT=1, DATA=null, EXP={}, timers={};
-
-function getTopic(){return TOPICS[CT-1];}
-function get(){return DATA;}
-function patch(obj){
-  DATA={...DATA,...obj};
-  render();
-  clearTimeout(timers[CT]);
-  timers[CT]=setTimeout(()=>save(CT,DATA),400);
-}
-function patchProblem(n,obj){
-  DATA.problems[n]={...DATA.problems[n],...obj};
-  render();
-  clearTimeout(timers[CT]);
-  timers[CT]=setTimeout(()=>save(CT,DATA),400);
-}
-function patchConcept(i,v){
-  DATA.concepts[i]=v;
-  render();
-  clearTimeout(timers[CT]);
-  timers[CT]=setTimeout(()=>save(CT,DATA),400);
-}
-function patchDesign(i,obj){
-  DATA.design[i]={...DATA.design[i],...obj};
-  render();
-  clearTimeout(timers[CT]);
-  timers[CT]=setTimeout(()=>save(CT,DATA),400);
-}
-
-async function loadTopic(t){
-  const topic=TOPICS[t-1];
-  const saved=await load(t);
-  const defs=defTopicState(topic);
-  if(saved){
-    // merge shallow; handle new problems/concepts/design added later
-    DATA={...defs,...saved,
-      problems:{...defs.problems,...(saved.problems||{})},
-      concepts:{...defs.concepts,...(saved.concepts||{})},
-      design:{...defs.design,...(saved.design||{})}};
-  } else {
-    DATA=defs;
+// Storage layer: prefers window.storage (Claude artifact runtime),
+// falls back to localStorage (downloaded / local file / regular browser tab).
+const STORE=(()=>{
+  const hasWS=typeof window!=='undefined'&&window.storage&&typeof window.storage.get==='function';
+  if(hasWS){
+    return{
+      async get(k){try{const r=await window.storage.get(k);return r?r.value:null;}catch{return null;}},
+      async set(k,v){try{await window.storage.set(k,v);}catch{}}
+    };
   }
-  render();
+  return{
+    async get(k){try{return localStorage.getItem(k);}catch{return null;}},
+    async set(k,v){try{localStorage.setItem(k,v);}catch{}}
+  };
+})();
+async function sget(key){const v=await STORE.get(key);if(!v)return null;try{return JSON.parse(v);}catch{return null;}}
+async function sset(key,val){await STORE.set(key,JSON.stringify(val));}
+
+// In-memory cache of every topic's state — needed for cross-topic stats
+let CACHE={};   // {topicId: state}
+let META=null;
+let CT=1;       // current topic
+let TAB='today';// today | topic | stats
+let EXP={};     // expanded problems on current topic
+let FILTER='all';
+let SEARCH='';
+const saveTimers={};
+
+async function loadAll(){
+  META=(await sget(META_KEY))||defMeta();
+  for(const t of TOPICS){
+    const saved=await sget(TOPIC_KEY(t.id));
+    const defs=defTopicState(t);
+    if(saved){
+      CACHE[t.id]={...defs,...saved,
+        problems:{...defs.problems,...(saved.problems||{})},
+        concepts:{...defs.concepts,...(saved.concepts||{})},
+        design:{...defs.design,...(saved.design||{})}};
+    }else{
+      CACHE[t.id]=defs;
+    }
+  }
+  CT=META.lastTopicId||1;
+  document.documentElement.setAttribute('data-theme',META.theme||'light');
+}
+function saveTopic(t){
+  clearTimeout(saveTimers['t'+t]);
+  saveTimers['t'+t]=setTimeout(()=>sset(TOPIC_KEY(t),CACHE[t]),350);
+}
+function saveMeta(){
+  clearTimeout(saveTimers.meta);
+  saveTimers.meta=setTimeout(()=>sset(META_KEY,META),350);
 }
 
-// =============================================================
-// RENDERING
-// =============================================================
-function diffBadge(d){const m={'E':'Easy','M':'Medium','H':'Hard'};return`<span class="diff-badge diff-${d}">${m[d]||d}</span>`;}
+// ════════════════════════════════════════════════════════════════
+// ACTIVITY + SRS
+// ════════════════════════════════════════════════════════════════
+function isoDay(d){d=d||new Date();const y=d.getFullYear();const m=String(d.getMonth()+1).padStart(2,'0');const dd=String(d.getDate()).padStart(2,'0');return`${y}-${m}-${dd}`;}
+function logActivity(){
+  const k=isoDay();
+  META.activity[k]=(META.activity[k]||0)+1;
+  saveMeta();
+}
+function markVisited(topicId,problemN){
+  if(!META.lastVisited[topicId])META.lastVisited[topicId]={};
+  META.lastVisited[topicId][problemN]=Date.now();
+  saveMeta();
+}
+function daysSince(ts){if(!ts)return Infinity;return(Date.now()-ts)/(1000*60*60*24);}
+// SRS: when is a problem due for review?
+function srsInterval(conf){if(conf<=1)return 1;if(conf===2)return 2;if(conf===3)return 4;if(conf===4)return 14;return 30;}
+function isDue(topicId,problemN,pState){
+  if(pState.redo)return{due:true,reason:'flagged'};
+  if(pState.status==='Not Started')return{due:false};
+  if(pState.status==='Solved Cleanly'&&pState.conf>=4&&!pState.redo){
+    const ts=META.lastVisited[topicId]?.[problemN];
+    const d=daysSince(ts);
+    const interval=srsInterval(pState.conf);
+    return{due:d>=interval,reason:'interval',daysOver:Math.floor(d-interval)};
+  }
+  if(pState.status==='Review Needed')return{due:true,reason:'review'};
+  if(pState.color==='red')return{due:true,reason:'red'};
+  if(pState.color==='yellow'&&pState.conf<=2){
+    const ts=META.lastVisited[topicId]?.[problemN];
+    return{due:daysSince(ts)>=2,reason:'low-conf'};
+  }
+  return{due:false};
+}
+function getReviewQueue(){
+  const q=[];
+  for(const t of TOPICS){
+    const st=CACHE[t.id];if(!st)continue;
+    for(const p of t.problems){
+      const ps=st.problems[p.n];if(!ps)continue;
+      const d=isDue(t.id,p.n,ps);
+      if(d.due){
+        const ts=META.lastVisited[t.id]?.[p.n];
+        q.push({topic:t,problem:p,state:ps,reason:d.reason,daysOver:d.daysOver||0,lastTs:ts||0});
+      }
+    }
+  }
+  // Sort: flagged > red > review-needed > overdue interval > low-conf
+  const order={flagged:0,red:1,review:2,'low-conf':3,interval:4};
+  q.sort((a,b)=>{
+    if(order[a.reason]!==order[b.reason])return order[a.reason]-order[b.reason];
+    return(b.daysOver||0)-(a.daysOver||0);
+  });
+  return q;
+}
+function computeStreak(){
+  let n=0;const d=new Date();d.setHours(0,0,0,0);
+  // If today not logged, allow yesterday to be the start
+  if(!META.activity[isoDay(d)])d.setDate(d.getDate()-1);
+  while(META.activity[isoDay(d)]>0){n++;d.setDate(d.getDate()-1);}
+  return n;
+}
+function totalSolved(){let n=0;for(const t of TOPICS){const st=CACHE[t.id];if(!st)continue;for(const p of t.problems)if(st.problems[p.n]?.status==='Solved Cleanly')n++;}return n;}
+function totalAttempted(){let n=0;for(const t of TOPICS){const st=CACHE[t.id];if(!st)continue;for(const p of t.problems){const s=st.problems[p.n]?.status;if(s&&s!=='Not Started')n++;}}return n;}
+function totalProblems(){return TOPICS.reduce((s,t)=>s+t.problems.length,0);}
+function totalConceptsLearned(){let n=0,tot=0;for(const t of TOPICS){const st=CACHE[t.id];if(!st)continue;for(const i in st.concepts){tot++;if(st.concepts[i])n++;}}return{n,tot};}
+function totalDesignLearned(){let n=0,tot=0;for(const t of TOPICS){const st=CACHE[t.id];if(!st)continue;for(const i in st.design){tot++;if(st.design[i]?.checked)n++;}}return{n,tot};}
+function totalMinutes(){let m=0;for(const t of TOPICS){const st=CACHE[t.id];if(!st)continue;for(const p of t.problems){const v=parseInt(st.problems[p.n]?.time);if(v)m+=v;}}return m;}
+function avgTimeByDiff(){const tot={E:[0,0],M:[0,0],H:[0,0]};for(const t of TOPICS){const st=CACHE[t.id];if(!st)continue;for(const p of t.problems){const v=parseInt(st.problems[p.n]?.time);if(v){tot[p.diff][0]+=v;tot[p.diff][1]++;}}}return{E:tot.E[1]?Math.round(tot.E[0]/tot.E[1]):0,M:tot.M[1]?Math.round(tot.M[0]/tot.M[1]):0,H:tot.H[1]?Math.round(tot.H[0]/tot.H[1]):0};}
+function diffDistribution(){const r={E:[0,0],M:[0,0],H:[0,0]};for(const t of TOPICS){const st=CACHE[t.id];if(!st)continue;for(const p of t.problems){r[p.diff][1]++;if(st.problems[p.n]?.status==='Solved Cleanly')r[p.diff][0]++;}}return r;}
+function topicProgress(t){
+  const st=CACHE[t.id];if(!st)return{cP:0,tP:1,cC:0,tC:1,cD:0,tD:1,cleanP:0};
+  const tP=t.problems.length;
+  const cleanP=t.problems.filter(p=>st.problems[p.n]?.status==='Solved Cleanly').length;
+  const cP=t.problems.filter(p=>{const s=st.problems[p.n]?.status;return s&&s!=='Not Started';}).length;
+  const tC=t.concepts.length;const cC=t.concepts.filter((_,i)=>st.concepts[i]).length;
+  const tD=t.design.length;const cD=t.design.filter((_,i)=>st.design[i]?.checked).length;
+  return{cP,tP,cC,tC,cD,tD,cleanP};
+}
 
-function renderTopicHeader(topic){
-  const phaseIdx=PHASES.indexOf(topic.phase);
-  const color=PHASE_COLORS[phaseIdx];
-  const totalP=topic.problems.length;
-  const solvedP=Object.values(DATA.problems).filter(p=>p.status==='Solved Cleanly').length;
-  const pct=totalP>0?Math.round(100*solvedP/totalP):0;
-  return`<div class="topic-header-card">
-    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-      <span class="pill pill-purple">Topic ${topic.id}/18</span>
-      <span class="phase-badge" style="background:${color};color:#fff">${topic.phase}</span>
-      <span style="font-size:11px;color:var(--muted);margin-left:auto">${solvedP}/${totalP} solved cleanly</span>
+// ════════════════════════════════════════════════════════════════
+// PATCH (writes) — also logs activity & visits, fires milestones
+// ════════════════════════════════════════════════════════════════
+function patchProblem(topicId,n,obj){
+  const isNotesOnly=Object.keys(obj).length===1&&'notes' in obj;
+  const before=JSON.stringify(CACHE[topicId].problems[n]);
+  CACHE[topicId].problems[n]={...CACHE[topicId].problems[n],...obj};
+  const after=JSON.stringify(CACHE[topicId].problems[n]);
+  if(before!==after&&!isNotesOnly){logActivity();markVisited(topicId,n);checkMilestones(topicId,n,obj);}
+  saveTopic(topicId);
+  if(!isNotesOnly)render();
+}
+function patchConcept(topicId,i,v){
+  CACHE[topicId].concepts[i]=v;
+  if(v)logActivity();
+  saveTopic(topicId);render();
+}
+function patchDesign(topicId,i,obj){
+  CACHE[topicId].design[i]={...CACHE[topicId].design[i],...obj};
+  if(obj.checked)logActivity();
+  saveTopic(topicId);render();
+}
+function patchTopic(topicId,obj){
+  const keys=Object.keys(obj);
+  const isNotesOnly=keys.length>0&&keys.every(k=>k==='conceptNotes'||k==='designNotes'||k==='notes');
+  CACHE[topicId]={...CACHE[topicId],...obj};
+  saveTopic(topicId);
+  if(!isNotesOnly)render();
+}
+function setTab(t){TAB=t;render();window.scrollTo({top:0,behavior:'smooth'});}
+function setTopic(id){if(id<1||id>18)return;CT=id;TAB='topic';EXP={};META.lastTopicId=id;saveMeta();render();window.scrollTo({top:0,behavior:'smooth'});}
+function toggleTheme(){META.theme=META.theme==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',META.theme);saveMeta();render();}
+function toggleExp(k){EXP[k]=!EXP[k];render();}
+function updateSearch(v){
+  SEARCH=v;
+  const el=document.getElementById('srcResults');
+  if(el)el.innerHTML=renderNoteResults();
+}
+
+// Milestones
+function checkMilestones(topicId,n,obj){
+  if(obj.status==='Solved Cleanly'){
+    const total=totalSolved();
+    const milestones=[1,5,10,25,50,75,100,150,200];
+    if(milestones.includes(total)&&!META.celebrated['solved_'+total]){
+      META.celebrated['solved_'+total]=true;saveMeta();
+      const phrases={1:'first one — beginnings',5:'five solved',10:'double digits',25:'a quarter century',50:'half a hundred',75:'seventy-five',100:'a century',150:'a hundred and fifty',200:'two hundred'};
+      showToast(`<em>${phrases[total]||total}</em> · keep going.`);
+    }
+    // Topic complete?
+    const topic=TOPICS.find(t=>t.id===topicId);
+    const prog=topicProgress(topic);
+    if(prog.cleanP===prog.tP&&!META.celebrated['topic_'+topicId]){
+      META.celebrated['topic_'+topicId]=true;saveMeta();
+      showToast(`<em>${topic.name}</em> · all problems solved cleanly.`);
+    }
+  }
+  // Streak milestones
+  const streak=computeStreak();
+  if([7,14,30,60,100].includes(streak)&&!META.celebrated['streak_'+streak]){
+    META.celebrated['streak_'+streak]=true;saveMeta();
+    showToast(`<em>${streak}-day streak</em> · sustained focus.`);
+  }
+}
+let toastTimer;
+function showToast(html){
+  const t=document.getElementById('toast');t.innerHTML='✦ '+html;
+  t.classList.add('show');clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>t.classList.remove('show'),3500);
+}
+
+// ════════════════════════════════════════════════════════════════
+// EXPORT / IMPORT
+// ════════════════════════════════════════════════════════════════
+function exportData(){
+  const d={meta:META,topics:CACHE,exportedAt:new Date().toISOString(),version:1};
+  const blob=new Blob([JSON.stringify(d,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;a.download=`prep-tracker-${isoDay()}.json`;a.click();
+  URL.revokeObjectURL(url);
+  showToast(`<em>exported</em> · ${isoDay()}`);
+}
+function importData(){
+  const inp=document.createElement('input');inp.type='file';inp.accept='application/json';
+  inp.onchange=async e=>{
+    const f=e.target.files[0];if(!f)return;
+    try{
+      const txt=await f.text();const d=JSON.parse(txt);
+      if(d.meta)META={...META,...d.meta};
+      if(d.topics){for(const id in d.topics){if(CACHE[id])CACHE[id]={...CACHE[id],...d.topics[id]};}}
+      saveMeta();for(const id in CACHE)await sset(TOPIC_KEY(id),CACHE[id]);
+      document.documentElement.setAttribute('data-theme',META.theme);
+      showToast('<em>imported</em> · progress restored.');
+      render();
+    }catch{showToast('<em>import failed</em> · invalid file.');}
+  };inp.click();
+}
+
+// ════════════════════════════════════════════════════════════════
+// RENDER
+// ════════════════════════════════════════════════════════════════
+const $=s=>document.querySelector(s);
+const escapeHtml=s=>String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+function renderTopbar(){
+  return`<div class="topbar">
+    <div class="brand">
+      <div class="brand-title">Prep <em>Tracker</em></div>
+      <div class="brand-sub">NeetCode roadmap · ${TOPICS.length} topics</div>
     </div>
-    <div class="topic-intro">${topic.intro}</div>
-    <div class="progress-bar"><div class="progress-fill" style="width:${pct}%;background:${color}"></div></div>
+    <button class="icon-btn" onclick="importData()" title="Import">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+    </button>
+    <button class="icon-btn" onclick="exportData()" title="Export">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+    </button>
+    <button class="icon-btn" onclick="toggleTheme()" title="Theme">
+      ${META.theme==='dark'
+        ?`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>`
+        :`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>`
+      }
+    </button>
+  </div>`;
+}
+function renderTabs(){
+  return`<div class="tabs">
+    ${['today','topic','stats'].map(t=>{
+      const lbl={today:'Today',topic:'Roadmap',stats:'Stats'}[t];
+      return`<button class="tab${TAB===t?' active':''}" onclick="setTab('${t}')">${lbl}</button>`;
+    }).join('')}
   </div>`;
 }
 
-function renderConcepts(topic){
+// ── Today view ─────────────────────────────────────────────────
+function renderToday(){
+  const streak=computeStreak();
+  const solved=totalSolved();
+  const totalP=totalProblems();
+  const queue=getReviewQueue();
+  const todayCount=META.activity[isoDay()]||0;
+  const concepts=totalConceptsLearned();
+  const minutes=totalMinutes();
+  const hours=Math.floor(minutes/60);
+  const lastTopic=TOPICS.find(t=>t.id===META.lastTopicId);
+  const lastProg=topicProgress(lastTopic);
+
+  // Hero greeting based on context
+  let greeting,line;
+  if(solved===0&&todayCount===0){
+    greeting='Welcome.';
+    line='Start with <strong>Arrays &amp; Hashing</strong> — the foundation that every interview question touches. Pick one problem and begin.';
+  }else if(todayCount===0){
+    greeting='A new day.';
+    line=`<strong>${queue.length}</strong> ${queue.length===1?'problem is':'problems are'} due for review · last session was on <strong>${lastTopic.name}</strong>. Open the queue below or pick up where you left off.`;
+  }else{
+    greeting=streak>=7?`${streak} days in.`:'Welcome back.';
+    line=`<strong>${todayCount}</strong> ${todayCount===1?'item':'items'} touched today · <strong>${solved}/${totalP}</strong> problems solved cleanly · <strong>${queue.length}</strong> due for review.`;
+  }
+
+  // Activity heatmap — last 12 weeks ending Sunday of current week
+  const HM_WEEKS=12;
+  const today=new Date();today.setHours(0,0,0,0);
+  const todayDow=today.getDay();// 0=Sun..6=Sat
+  const endSun=new Date(today);endSun.setDate(today.getDate()+(7-todayDow)%7);// next Sun (or today if Sun)
+  const start=new Date(endSun);start.setDate(endSun.getDate()-HM_WEEKS*7+1);
+  const cells=[];const monthMarks={};let lastMonth=-1;
+  for(let w=0;w<HM_WEEKS;w++){
+    for(let d=0;d<7;d++){
+      const dt=new Date(start);dt.setDate(start.getDate()+w*7+d);
+      const key=isoDay(dt);
+      const ct=META.activity[key]||0;
+      const future=dt>today;
+      let lvl=0;if(ct>=10)lvl=4;else if(ct>=5)lvl=3;else if(ct>=2)lvl=2;else if(ct>=1)lvl=1;
+      const isToday=key===isoDay(today);
+      cells.push({col:w+1,row:d+2,key,ct,lvl,future,isToday});
+      if(d===0){
+        const m=dt.getMonth();
+        if(m!==lastMonth){monthMarks[w+1]=dt.toLocaleDateString('en',{month:'short'});lastMonth=m;}
+      }
+    }
+  }
+  const heatHtml=cells.map(c=>{
+    if(c.future)return`<div class="hm-cell" style="grid-column:${c.col};grid-row:${c.row};opacity:0.25"></div>`;
+    return`<div class="hm-cell ${c.lvl?'l'+c.lvl:''}${c.isToday?' today':''}" style="grid-column:${c.col};grid-row:${c.row}" title="${c.key} · ${c.ct} ${c.ct===1?'item':'items'}"></div>`;
+  }).join('');
+  const monthHtml=Object.entries(monthMarks).map(([col,m])=>`<div class="hm-month" style="grid-column:${col}">${m}</div>`).join('');
+
+  // Resume card — last topic
+  const resumeC=lastProg.tP?Math.round(100*lastProg.cleanP/lastProg.tP):0;
+  const phaseColor=PHASE_COLORS[lastTopic.phase];
+
+  return`
+    <div class="hero">
+      <div class="hero-greeting">${greeting}</div>
+      <div class="hero-line">${line}</div>
+      <div class="hero-stats">
+        ${streak>0?`<span class="pill pill-accent">✦ ${streak}-day streak</span>`:''}
+        ${todayCount>0?`<span class="pill pill-green">${todayCount} today</span>`:''}
+        ${queue.length>0?`<span class="pill pill-amber">${queue.length} due</span>`:''}
+        <span class="pill">${concepts.n}/${concepts.tot} concepts</span>
+        ${hours>0?`<span class="pill">${hours}h logged</span>`:''}
+      </div>
+    </div>
+
+    <div class="card heatmap-card">
+      <div class="heatmap-head">
+        <h3>Activity</h3>
+        <div class="heatmap-meta">last ${HM_WEEKS} weeks</div>
+      </div>
+      <div class="heatmap-wrap">
+        <div class="heatmap" style="grid-template-columns:repeat(${HM_WEEKS},11px)">
+          ${monthHtml}${heatHtml}
+        </div>
+      </div>
+      <div class="hm-legend">
+        <span>less</span>
+        <span class="hm-legend-cell" style="background:var(--heat-0)"></span>
+        <span class="hm-legend-cell" style="background:var(--heat-1)"></span>
+        <span class="hm-legend-cell" style="background:var(--heat-2)"></span>
+        <span class="hm-legend-cell" style="background:var(--heat-3)"></span>
+        <span class="hm-legend-cell" style="background:var(--heat-4)"></span>
+        <span>more</span>
+      </div>
+    </div>
+
+    <div class="stat-row" style="margin-top:12px">
+      <div class="stat-tile">
+        <div class="stat-num">${solved}<em>/${totalP}</em></div>
+        <div class="stat-label">Solved cleanly</div>
+      </div>
+      <div class="stat-tile">
+        <div class="stat-num">${queue.length}</div>
+        <div class="stat-label">Due for review</div>
+      </div>
+      <div class="stat-tile">
+        <div class="stat-num">${streak}</div>
+        <div class="stat-label">Day streak</div>
+      </div>
+      <div class="stat-tile">
+        <div class="stat-num">${hours}<em>h</em></div>
+        <div class="stat-label">Time logged</div>
+      </div>
+    </div>
+
+    <div class="card card-pad" style="margin-top:14px">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px">
+        <h3 class="card-title">Review <em>queue</em></h3>
+        <span class="pill">${queue.length} ${queue.length===1?'item':'items'}</span>
+      </div>
+      ${queue.length===0
+        ?`<div class="queue-empty">Nothing due. The well-tended garden.<div class="empty-sub" style="font-style:normal">Mark problems as needing review or solve new ones to build the queue.</div></div>`
+        :queue.slice(0,8).map(q=>{
+          const reasonLbl={flagged:'flagged',red:'red',review:'review',interval:`+${q.daysOver||0}d`,'low-conf':'low conf'}[q.reason];
+          const overdue=q.reason==='interval'&&(q.daysOver||0)>=3;
+          return`<div class="queue-row" onclick="setTopic(${q.topic.id});setTimeout(()=>{EXP['p${q.problem.n}']=true;render();},50)">
+            <span class="queue-num">#${q.problem.n}</span>
+            <div style="flex:1;min-width:0">
+              <div class="queue-name">${escapeHtml(q.problem.name)}</div>
+              <div class="queue-topic">${q.topic.name}</div>
+            </div>
+            <div class="queue-meta">
+              <span class="diff-badge diff-${q.problem.diff}">${q.problem.diff}</span>
+              <span class="queue-due ${overdue?'overdue':''}">${reasonLbl}</span>
+            </div>
+          </div>`;
+        }).join('')+(queue.length>8?`<div style="text-align:center;padding-top:10px;font-size:11px;color:var(--muted);font-family:'IBM Plex Mono',monospace">+ ${queue.length-8} more</div>`:'')
+      }
+    </div>
+
+    <div class="card card-pad" style="margin-top:12px;border-left:3px solid ${phaseColor}">
+      <div class="card-sub">Continue where you left off</div>
+      <div style="display:flex;align-items:center;gap:14px">
+        <div style="flex:1;min-width:0">
+          <div class="card-title" style="margin-bottom:4px">${escapeHtml(lastTopic.name)}</div>
+          <div style="font-size:12px;color:var(--muted)">Topic ${lastTopic.id} · ${lastTopic.phase}</div>
+          <div class="topic-progress" style="margin-top:10px">
+            <div class="progress-track"><div class="progress-fill" style="width:${resumeC}%;background:${phaseColor}"></div></div>
+            <span class="progress-text">${lastProg.cleanP}/${lastProg.tP}</span>
+          </div>
+        </div>
+        <button class="icon-btn" style="width:auto;padding:0 14px;height:36px;font-family:inherit;font-size:12px;font-weight:500;gap:5px" onclick="setTopic(${lastTopic.id})">
+          Open
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" style="width:13px;height:13px"><path d="M9 6l6 6-6 6"/></svg>
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+// ── Topic view ─────────────────────────────────────────────────
+function renderPhaseNav(){
+  let html='<div class="phase-nav">';
+  for(const phase of PHASES){
+    const inPhase=TOPICS.filter(t=>t.phase===phase);
+    const color=PHASE_COLORS[phase];
+    html+=`<div class="phase-group" style="--phase-color:${color}">
+      <div class="phase-group-label">${phase}</div>
+      <div class="phase-dots">`;
+    for(const t of inPhase){
+      const prog=topicProgress(t);
+      const frac=prog.tP?prog.cleanP/prog.tP:0;
+      let cls='';
+      if(t.id===CT)cls='current';
+      else if(frac===1)cls='done';
+      else if(frac>0||prog.cC>0)cls='partial';
+      html+=`<button class="tdot ${cls}" style="--frac:${Math.max(0.4,frac)}" onclick="setTopic(${t.id})" title="${t.id}. ${escapeHtml(t.name)} · ${prog.cleanP}/${prog.tP}">${t.id}</button>`;
+    }
+    html+=`</div></div>`;
+  }
+  html+='</div>';
+  return html;
+}
+function renderTopicView(){
+  const topic=TOPICS[CT-1];
+  const st=CACHE[CT];
+  const prog=topicProgress(topic);
+  const phaseColor=PHASE_COLORS[topic.phase];
+  const pct=prog.tP?Math.round(100*prog.cleanP/prog.tP):0;
+
+  const counts={all:topic.problems.length,todo:0,prog:0,solved:0,review:0,red:0};
+  topic.problems.forEach(p=>{
+    const ps=st.problems[p.n];if(!ps)return;
+    if(ps.status==='Not Started')counts.todo++;
+    else if(ps.status==='In Progress'||ps.status==='Solved with Hints')counts.prog++;
+    else if(ps.status==='Solved Cleanly')counts.solved++;
+    if(isDue(CT,p.n,ps).due)counts.review++;
+    if(ps.color==='red')counts.red++;
+  });
+
+  const filtered=topic.problems.filter(p=>{
+    const ps=st.problems[p.n];
+    if(FILTER==='all')return true;
+    if(FILTER==='todo')return ps.status==='Not Started';
+    if(FILTER==='prog')return ps.status==='In Progress'||ps.status==='Solved with Hints';
+    if(FILTER==='solved')return ps.status==='Solved Cleanly';
+    if(FILTER==='review')return isDue(CT,p.n,ps).due;
+    if(FILTER==='red')return ps.color==='red';
+    return true;
+  });
+
+  return`
+    ${renderPhaseNav()}
+    <div class="card topic-header" style="--phase-color:${phaseColor}">
+      <div class="topic-header-top">
+        <span class="pill" style="background:${phaseColor}22;color:${phaseColor}">${topic.phase}</span>
+        <span class="pill">Topic ${topic.id} of ${TOPICS.length}</span>
+        <div class="topic-arrows" style="margin-left:auto">
+          <button class="icon-btn" onclick="setTopic(${CT-1})" ${CT===1?'disabled style="opacity:0.3;cursor:not-allowed"':''}>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M15 6l-6 6 6 6"/></svg>
+          </button>
+          <button class="icon-btn" onclick="setTopic(${CT+1})" ${CT===TOPICS.length?'disabled style="opacity:0.3;cursor:not-allowed"':''}>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="topic-name">${escapeHtml(topic.name)}</div>
+      <div class="topic-intro">${escapeHtml(topic.intro)}</div>
+      <div class="topic-meta-row">
+        <div class="topic-progress">
+          <div class="progress-track"><div class="progress-fill" style="width:${pct}%;background:${phaseColor}"></div></div>
+          <span class="progress-text">${prog.cleanP}/${prog.tP} · ${pct}%</span>
+        </div>
+      </div>
+    </div>
+
+    ${renderConcepts(topic,st)}
+    ${renderProblems(topic,st,counts,filtered,phaseColor)}
+    ${renderDesign(topic,st)}
+  `;
+}
+function renderConcepts(topic,st){
+  const k='concepts';
   const rows=topic.concepts.map((c,i)=>{
-    const done=DATA.concepts[i];
+    const done=st.concepts[i];
     return`<div class="concept-row${done?' done':''}">
-      <input type="checkbox" ${done?'checked':''} onchange="patchConcept(${i},this.checked)">
+      <input type="checkbox" ${done?'checked':''} onchange="patchConcept(${CT},${i},this.checked)">
       <div class="concept-body">
-        <div class="c-name">${c.name}</div>
-        <div class="c-desc">${c.desc}</div>
+        <div class="c-name">${escapeHtml(c.name)}</div>
+        <div class="c-desc">${escapeHtml(c.desc)}</div>
       </div>
     </div>`;
   }).join('');
-  const k='concepts-n';
-  return`<div class="card card-purple">
-    <div class="section">
-      <div class="section-label" style="margin-top:14px">🗺️ Concepts to Learn</div>
-      ${rows}
-      <button class="notes-toggle" onclick="toggleExp('${k}')">${EXP[k]?'▼':'▶'} Concept notes</button>
-      ${EXP[k]?`<textarea class="notes" placeholder="What clicked · Mental models · Things I keep forgetting · Questions to revisit..." oninput="patch({conceptNotes:this.value})">${DATA.conceptNotes||''}</textarea>`:''}
+  const learned=topic.concepts.filter((_,i)=>st.concepts[i]).length;
+  return`<div class="card card-pad" style="margin-top:12px">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px">
+      <div class="card-title">Concepts <em>to learn</em></div>
+      <span class="pill ${learned===topic.concepts.length?'pill-green':''}">${learned}/${topic.concepts.length}</span>
+    </div>
+    <div class="concept-list">${rows}</div>
+    <button class="notes-toggle" onclick="toggleExp('${k}')" style="margin-top:8px">${EXP[k]?'▼':'▶'} Concept notes</button>
+    ${EXP[k]?`<textarea class="notes" placeholder="What clicked · Mental models · Things I keep forgetting · Questions to revisit..." oninput="patchTopic(${CT},{conceptNotes:this.value})">${escapeHtml(st.conceptNotes||'')}</textarea>`:''}
+  </div>`;
+}
+function renderProblems(topic,st,counts,filtered,phaseColor){
+  const filters=[
+    ['all','All',counts.all],
+    ['todo','Todo',counts.todo],
+    ['prog','In progress',counts.prog],
+    ['solved','Solved',counts.solved],
+    ['review','Due review',counts.review],
+    ['red','Red',counts.red]
+  ];
+  return`<div class="card card-pad problems-section" style="margin-top:12px">
+    <div class="problems-head">
+      <h3>Problems</h3>
+      <span class="pmeta">${filtered.length} shown · ${counts.solved}/${counts.all} clean</span>
+    </div>
+    <div class="filter-bar">
+      ${filters.map(([k,lbl,n])=>`<button class="fchip${FILTER===k?' active':''}" onclick="FILTER='${k}';render()">${lbl}<span class="fchip-count">${n}</span></button>`).join('')}
+    </div>
+    <div>
+      ${filtered.length===0
+        ?`<div class="empty">Nothing here.<div class="empty-sub">Try a different filter.</div></div>`
+        :filtered.map(p=>renderProblemCard(p,st)).join('')
+      }
     </div>
   </div>`;
 }
-
-function renderProblem(p){
-  const s=DATA.problems[p.n]||{status:'Not Started',color:null,conf:0,time:'',notes:'',timed:false,explain:false,redo:false};
-  const border=s.color==='green'?'card-green':s.color==='yellow'?'card-yellow':s.color==='red'?'card-red':'';
-  const k=`p${p.n}-n`;
-  return`<div class="card ${border}">
-    <div class="card-head">
-      <span class="prob-n">#${p.n}</span>
-      <span class="problem-name">${p.name}${p.prem?'<span class="prem-badge">Premium</span>':''}</span>
-      ${diffBadge(p.diff)}
+function renderProblemCard(p,st){
+  const s=st.problems[p.n];
+  const k=`p${p.n}`;
+  const open=!!EXP[k];
+  const colCls=s.color==='green'?'col-green':s.color==='yellow'?'col-yellow':s.color==='red'?'col-red':'';
+  const stCls={'In Progress':'s-prog','Solved with Hints':'s-hint','Solved Cleanly':'s-clean','Review Needed':'s-rev'}[s.status]||'';
+  const due=isDue(CT,p.n,s);
+  return`<div class="pcard ${colCls}${due.due?' due':''}${open?' open':''}">
+    <div class="pcard-row" onclick="toggleExp('${k}')">
+      <span class="p-num">#${p.n}</span>
+      <span class="p-name${s.status==='Solved Cleanly'?' solved':''}">${escapeHtml(p.name)}${p.prem?'<span class="prem-pill">PREM</span>':''}</span>
+      <div class="p-tags">
+        ${due.due?'<span class="due-flag">due</span>':''}
+        <span class="status-dot ${stCls}" title="${s.status}"></span>
+        <span class="diff-badge diff-${p.diff}">${p.diff}</span>
+        <svg class="expand-i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>
+      </div>
     </div>
-    <div class="card-links">
-      <a class="link-btn" href="${p.lc}" target="_blank" rel="noopener">LeetCode</a>
-      ${p.nc?`<a class="link-btn" href="${p.nc}" target="_blank" rel="noopener">🎥 NeetCode</a>`:''}
-    </div>
-    <div class="section">
-      <div class="row">
-        <select class="ctrl" onchange="patchProblem(${p.n},{status:this.value})">
-          ${['Not Started','In Progress','Solved with Hints','Solved Cleanly','Review Needed'].map(v=>`<option${s.status===v?' selected':''}>${v}</option>`).join('')}
-        </select>
-      </div>
-      <div class="row">
-        ${[['green','🟢'],['yellow','🟡'],['red','🔴']].map(([c,e])=>`<button class="color-btn${s.color===c?' active-'+c:''}" onclick="patchProblem(${p.n},{color:${s.color===c?'null':"'"+c+"'"}})">${e}</button>`).join('')}
-      </div>
-      <div class="row" style="gap:5px">
-        <span style="font-size:11px;color:var(--muted);margin-right:2px">Conf</span>
-        ${[1,2,3,4,5].map(i=>`<button class="conf-btn${i<=s.conf?' active':''}" onclick="patchProblem(${p.n},{conf:${s.conf===i?0:i}})">${i}</button>`).join('')}
-        <input class="time-input" type="number" placeholder="min" value="${s.time||''}" oninput="patchProblem(${p.n},{time:this.value})" style="margin-left:8px">
-        <span style="font-size:11px;color:var(--muted)">min</span>
-      </div>
-      <div class="row" style="gap:12px;flex-wrap:wrap">
-        <label class="cb-row"><input type="checkbox" ${s.timed?'checked':''} onchange="patchProblem(${p.n},{timed:this.checked})"> Timed</label>
-        <label class="cb-row"><input type="checkbox" ${s.explain?'checked':''} onchange="patchProblem(${p.n},{explain:this.checked})"> Can explain</label>
-        <label class="cb-row"><input type="checkbox" ${s.redo?'checked':''} onchange="patchProblem(${p.n},{redo:this.checked})"> Need redo</label>
-      </div>
-      <button class="notes-toggle" onclick="toggleExp('${k}')">${EXP[k]?'▼':'▶'} Problem notes</button>
-      ${EXP[k]?`<textarea class="notes" placeholder="My approach · Why it worked/failed · Key insight · What to remember next time..." oninput="patchProblem(${p.n},{notes:this.value})">${s.notes||''}</textarea>`:''}
-    </div>
+    ${open?renderProblemBody(p,s,k):''}
   </div>`;
 }
-
-function renderDesign(topic){
+function renderProblemBody(p,s,k){
+  return`<div class="pcard-body">
+    <div class="pb-links">
+      <a class="link-btn" href="${p.lc}" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        LeetCode
+      </a>
+      ${p.nc?`<a class="link-btn" href="${p.nc}" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+        NeetCode
+      </a>`:''}
+    </div>
+    <div class="pb-row">
+      <label>Status</label>
+      <select class="ctrl" onchange="patchProblem(${CT},${p.n},{status:this.value})">
+        ${['Not Started','In Progress','Solved with Hints','Solved Cleanly','Review Needed'].map(v=>`<option${s.status===v?' selected':''}>${v}</option>`).join('')}
+      </select>
+    </div>
+    <div class="pb-row">
+      <label>Vibe</label>
+      <div class="color-grp">
+        ${[['green','🟢','Got it'],['yellow','🟡','Shaky'],['red','🔴','Stuck']].map(([c,e,lbl])=>`<button class="color-btn${s.color===c?' act-'+c:''}" onclick="patchProblem(${CT},${p.n},{color:${s.color===c?'null':"'"+c+"'"}})">${e} <span style="font-size:11px">${lbl}</span></button>`).join('')}
+      </div>
+    </div>
+    <div class="pb-row">
+      <label>Conf</label>
+      <div class="conf-grp">
+        ${[1,2,3,4,5].map(i=>`<button class="conf-btn${i<=s.conf?' act':''}" onclick="patchProblem(${CT},${p.n},{conf:${s.conf===i?0:i}})">${i}</button>`).join('')}
+      </div>
+      <input class="time-input" type="number" placeholder="min" value="${s.time||''}" onchange="patchProblem(${CT},${p.n},{time:this.value})">
+      <span style="font-size:11px;color:var(--muted)">min</span>
+    </div>
+    <div class="cb-grp">
+      <label class="cb-row"><input type="checkbox" ${s.timed?'checked':''} onchange="patchProblem(${CT},${p.n},{timed:this.checked})"> Timed</label>
+      <label class="cb-row"><input type="checkbox" ${s.explain?'checked':''} onchange="patchProblem(${CT},${p.n},{explain:this.checked})"> Can explain</label>
+      <label class="cb-row"><input type="checkbox" ${s.redo?'checked':''} onchange="patchProblem(${CT},${p.n},{redo:this.checked})"> Need redo</label>
+    </div>
+    <button class="notes-toggle" onclick="toggleExp('${k}-n')">${EXP[k+'-n']?'▼':'▶'} Problem notes</button>
+    ${EXP[k+'-n']?`<textarea class="notes" placeholder="My approach · Why it worked/failed · Key insight · What to remember next time..." oninput="patchProblem(${CT},${p.n},{notes:this.value})">${escapeHtml(s.notes||'')}</textarea>`:''}
+  </div>`;
+}
+function renderDesign(topic,st){
+  const k='design';
   const rows=topic.design.map((d,i)=>{
-    const s=DATA.design[i]||{checked:false,status:'Not Started'};
-    return`<div class="design-item${s.checked?' done':''}">
-      <input type="checkbox" ${s.checked?'checked':''} onchange="patchDesign(${i},{checked:this.checked})">
+    const ds=st.design[i]||{checked:false,status:'Not Started'};
+    return`<div class="d-row${ds.checked?' done':''}">
+      <input type="checkbox" ${ds.checked?'checked':''} onchange="patchDesign(${CT},${i},{checked:this.checked})">
       <div class="concept-body">
-        <div class="d-name">${d.name}</div>
-        <div class="c-desc">${d.desc}</div>
+        <div class="d-name">${escapeHtml(d.name)}</div>
+        <div class="d-desc">${escapeHtml(d.desc)}</div>
       </div>
-      <select class="design-status" onchange="patchDesign(${i},{status:this.value})">
-        ${['Not Started','In Progress','Understood','Needs Review'].map(v=>`<option${s.status===v?' selected':''}>${v}</option>`).join('')}
+      <select class="d-status" onchange="patchDesign(${CT},${i},{status:this.value})">
+        ${['Not Started','In Progress','Understood','Needs Review'].map(v=>`<option${ds.status===v?' selected':''}>${v}</option>`).join('')}
       </select>
     </div>`;
   }).join('');
-  const k='design-n';
-  return`<div class="card card-blue">
-    <div class="section">
-      <div class="section-label" style="margin-top:14px">🏗️ System Design — Paired Concepts</div>
-      ${rows}
-      <button class="notes-toggle" onclick="toggleExp('${k}')">${EXP[k]?'▼':'▶'} Design notes</button>
-      ${EXP[k]?`<textarea class="notes" placeholder="Definition in my own words · Tradeoffs · Real product example · What's still fuzzy..." oninput="patch({designNotes:this.value})">${DATA.designNotes||''}</textarea>`:''}
+  const learned=topic.design.filter((_,i)=>st.design[i]?.checked).length;
+  return`<div class="card dcard" style="margin-top:12px;border-left:2.5px solid var(--blue)">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:2px">
+      <h3>System <em>design</em></h3>
+      <span class="pill pill-blue">${learned}/${topic.design.length}</span>
     </div>
+    <div class="dcard-sub">Paired concepts that come up at the same level of abstraction</div>
+    ${rows}
+    <button class="notes-toggle" onclick="toggleExp('${k}')" style="margin-top:8px">${EXP[k]?'▼':'▶'} Design notes</button>
+    ${EXP[k]?`<textarea class="notes" placeholder="Definition in my own words · Tradeoffs · Real product example · What's still fuzzy..." oninput="patchTopic(${CT},{designNotes:this.value})">${escapeHtml(st.designNotes||'')}</textarea>`:''}
   </div>`;
 }
 
-function computeOverallStats(){
-  // Stats across current topic
-  let solved=0,inprog=0,green=0,yellow=0,red=0;
-  Object.values(DATA.problems).forEach(s=>{
-    if(s.status==='Solved Cleanly')solved++;
-    if(s.status==='In Progress')inprog++;
-    if(s.color==='green')green++;
-    if(s.color==='yellow')yellow++;
-    if(s.color==='red')red++;
-  });
-  const cLearned=Object.values(DATA.concepts).filter(v=>v).length;
-  const cTotal=Object.keys(DATA.concepts).length;
-  return{solved,inprog,green,yellow,red,cLearned,cTotal};
+// ── Stats view ──────────────────────────────────────────────────
+function renderStats(){
+  const totalP=totalProblems();
+  const solved=totalSolved();
+  const attempted=totalAttempted();
+  const concepts=totalConceptsLearned();
+  const design=totalDesignLearned();
+  const minutes=totalMinutes();
+  const hours=Math.floor(minutes/60);
+  const mins=minutes%60;
+  const avgT=avgTimeByDiff();
+  const dist=diffDistribution();
+  const pctAttempted=totalP?Math.round(100*attempted/totalP):0;
+  const pctSolved=totalP?Math.round(100*solved/totalP):0;
+
+  // Mastery matrix
+  const matrixRows=TOPICS.map(t=>{
+    const p=topicProgress(t);
+    const color=PHASE_COLORS[t.phase];
+    const pPct=p.tP?Math.round(100*p.cleanP/p.tP):0;
+    const cPct=p.tC?Math.round(100*p.cC/p.tC):0;
+    const dPct=p.tD?Math.round(100*p.cD/p.tD):0;
+    const cell=(pct,n,total)=>`<div class="mx-cell ${pct===100?'full':''}">
+      <div>${n}/${total}</div>
+      <div class="mx-bar"><div class="mx-bar-fill" style="width:${pct}%;background:${color}"></div></div>
+    </div>`;
+    return`<div class="mx-row" onclick="setTopic(${t.id})" style="cursor:pointer">
+      <div class="mx-name"><span class="ph-tag" style="background:${color}"></span>${escapeHtml(t.name)}</div>
+      ${cell(cPct,p.cC,p.tC)}
+      ${cell(pPct,p.cleanP,p.tP)}
+      ${cell(dPct,p.cD,p.tD)}
+    </div>`;
+  }).join('');
+
+  return`
+    <div class="hero">
+      <div class="hero-greeting">The <em>data</em>.</div>
+      <div class="hero-line">A complete view of where you are. Click any topic row to jump in.</div>
+    </div>
+
+    <div class="stat-row" style="margin-top:12px">
+      <div class="stat-tile">
+        <div class="stat-num">${pctSolved}<em>%</em></div>
+        <div class="stat-label">Roadmap solved</div>
+        <div class="stat-trend">${solved} of ${totalP} problems</div>
+      </div>
+      <div class="stat-tile">
+        <div class="stat-num">${pctAttempted}<em>%</em></div>
+        <div class="stat-label">Attempted</div>
+        <div class="stat-trend">${attempted} of ${totalP}</div>
+      </div>
+      <div class="stat-tile">
+        <div class="stat-num">${hours}<em>h ${mins}m</em></div>
+        <div class="stat-label">Time logged</div>
+        <div class="stat-trend">across all problems</div>
+      </div>
+      <div class="stat-tile">
+        <div class="stat-num">${concepts.n}<em>/${concepts.tot}</em></div>
+        <div class="stat-label">Concepts</div>
+        <div class="stat-trend">+ ${design.n}/${design.tot} design</div>
+      </div>
+    </div>
+
+    <div class="card card-pad" style="margin-top:14px">
+      <div class="card-title" style="margin-bottom:4px">Mastery <em>matrix</em></div>
+      <div class="card-sub">Concepts · Problems · Design — by topic</div>
+      <div class="matrix">
+        <div class="mx-h">Topic</div>
+        <div class="mx-h">Concepts</div>
+        <div class="mx-h">Problems</div>
+        <div class="mx-h">Design</div>
+        ${matrixRows}
+      </div>
+    </div>
+
+    <div class="card card-pad" style="margin-top:12px">
+      <div class="card-title" style="margin-bottom:10px">Difficulty <em>distribution</em></div>
+      <div class="dist-grid">
+        ${[['E','Easy',dist.E,avgT.E],['M','Medium',dist.M,avgT.M],['H','Hard',dist.H,avgT.H]].map(([d,lbl,arr,avg])=>{
+          const pct=arr[1]?Math.round(100*arr[0]/arr[1]):0;
+          return`<div class="dist-tile">
+            <div class="dist-num">${arr[0]}<em>/${arr[1]}</em></div>
+            <div class="dist-lbl">${lbl}</div>
+            <div style="margin-top:8px;height:3px;background:var(--surface);border-radius:2px;overflow:hidden">
+              <div style="height:100%;width:${pct}%;background:var(--accent)"></div>
+            </div>
+            ${avg?`<div style="font-size:10px;color:var(--muted);margin-top:6px;font-family:'IBM Plex Mono',monospace">avg ${avg}m</div>`:''}
+          </div>`;
+        }).join('')}
+      </div>
+    </div>
+
+    <div class="card card-pad" style="margin-top:12px">
+      <div class="card-title" style="margin-bottom:10px">Search <em>notes</em></div>
+      <input class="search-input" id="srcInput" type="text" placeholder="Search across all your problem & concept notes..." value="${escapeHtml(SEARCH)}" oninput="updateSearch(this.value)">
+      <div id="srcResults">${renderNoteResults()}</div>
+    </div>
+  `;
+}
+function renderNoteResults(){
+  if(!SEARCH||SEARCH.length<2)return`<div style="text-align:center;color:var(--muted);font-size:12px;padding:20px;font-style:italic;font-family:'Instrument Serif',serif;font-size:15px">Type to search.</div>`;
+  const q=SEARCH.toLowerCase();
+  const results=[];
+  for(const t of TOPICS){
+    const st=CACHE[t.id];if(!st)continue;
+    if(st.conceptNotes?.toLowerCase().includes(q))results.push({topic:t,kind:'Concepts',text:st.conceptNotes,jump:t.id});
+    if(st.designNotes?.toLowerCase().includes(q))results.push({topic:t,kind:'Design',text:st.designNotes,jump:t.id});
+    for(const p of t.problems){
+      const ps=st.problems[p.n];
+      if(ps?.notes?.toLowerCase().includes(q))results.push({topic:t,kind:`#${p.n} ${p.name}`,text:ps.notes,jump:t.id,problem:p});
+    }
+  }
+  if(results.length===0)return`<div style="text-align:center;color:var(--muted);font-size:13px;padding:16px">No matches for "${escapeHtml(SEARCH)}"</div>`;
+  const re=new RegExp(`(${SEARCH.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`,'gi');
+  return results.slice(0,20).map(r=>{
+    const idx=r.text.toLowerCase().indexOf(q);
+    const start=Math.max(0,idx-50);const end=Math.min(r.text.length,idx+150);
+    let snippet=(start>0?'…':'')+r.text.slice(start,end)+(end<r.text.length?'…':'');
+    snippet=escapeHtml(snippet).replace(re,'<mark>$1</mark>');
+    return`<div class="note-result" onclick="setTopic(${r.jump})">
+      <div class="nr-head"><span>${escapeHtml(r.topic.name)} · ${escapeHtml(r.kind)}</span><span style="opacity:0.7">jump →</span></div>
+      <div class="nr-text">${snippet}</div>
+    </div>`;
+  }).join('')+(results.length>20?`<div style="text-align:center;font-size:11px;color:var(--muted);padding-top:6px;font-family:'IBM Plex Mono',monospace">+ ${results.length-20} more</div>`:'');
 }
 
+// ── Master render ──────────────────────────────────────────────
 function render(){
-  if(!DATA){document.getElementById('root').innerHTML='<div style="padding:40px;text-align:center;color:var(--muted)">Loading...</div>';return;}
-  const topic=getTopic();
-  const st=computeOverallStats();
-
-  let html=`<div class="header">
-    <div class="title">Interview Prep Tracker</div>
-    <div class="subtitle">NeetCode Roadmap · DSA + System Design</div>
-    <div class="stats-row">
-      <span class="pill pill-purple">${topic.name}</span>
-      <span class="pill pill-green">${st.solved}/${topic.problems.length} solved</span>
-      <span class="pill pill-blue">${st.cLearned}/${st.cTotal} concepts</span>
-      ${st.green?`<span class="pill pill-green">${st.green} 🟢</span>`:''}
-      ${st.yellow?`<span class="pill pill-yellow">${st.yellow} 🟡</span>`:''}
-      ${st.red?`<span class="pill pill-red">${st.red} 🔴</span>`:''}
-    </div>
-  </div>
-
-  <div class="topic-nav">
-    <button class="nav-btn" onclick="goTopic(${CT-1})" ${CT===1?'disabled':''}>←</button>
-    <div class="topic-title">${topic.name}<small>Topic ${CT} of 18 · ${topic.phase}</small></div>
-    <button class="nav-btn" onclick="goTopic(${CT+1})" ${CT===18?'disabled':''}>→</button>
-  </div>
-
-  <div class="dots">
-    ${TOPICS.map(t=>{
-      const pi=PHASES.indexOf(t.phase);
-      const cls=t.id===CT?DOT_CLASSES[pi]:'';
-      return`<button class="dot ${cls}" onclick="goTopic(${t.id})" title="${t.id}. ${t.name}">${t.id}</button>`;
-    }).join('')}
-  </div>
-
-  ${renderTopicHeader(topic)}
-
-  <div class="cards">
-    ${renderConcepts(topic)}
-    <div class="section-label" style="padding:0 4px;margin-top:4px;margin-bottom:-4px">📝 Problems (${topic.problems.length})</div>
-    ${topic.problems.map(renderProblem).join('')}
-    ${renderDesign(topic)}
-  </div>`;
-
-  document.getElementById('root').innerHTML=html;
+  if(!META){$('#root').innerHTML='<div class="empty">Loading.<div class="empty-sub">Restoring your progress.</div></div>';return;}
+  let body='';
+  if(TAB==='today')body=renderToday();
+  else if(TAB==='topic')body=renderTopicView();
+  else if(TAB==='stats')body=renderStats();
+  $('#root').innerHTML=renderTopbar()+renderTabs()+body;
 }
 
-function toggleExp(k){EXP[k]=!EXP[k];render();}
-function goTopic(t){if(t<1||t>18)return;CT=t;EXP={};loadTopic(t);}
-
-loadTopic(1);
+// ── Init ────────────────────────────────────────────────────────
+loadAll().then(render).catch(e=>{
+  console.error(e);
+  $('#root').innerHTML='<div class="empty">Something broke.<div class="empty-sub">Refresh the page; your data is safe.</div></div>';
+});
 </script>
 </body>
 </html>
